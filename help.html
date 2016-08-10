@@ -1,0 +1,96 @@
+<html>
+
+<body bgcolor="#E6E6E6">
+<h4>Inhaltsverzeichnis</h4>
+
+<ul>
+    <li><a href="#start">Einleitung</a></li>
+    <li><a href="#updates">Update Benachrichtigungen</a></li>
+    <li><a href="#upgrade">System Aktualisierung</a></li>
+	<li><a href="#error">Fehlerbenachrichtigungen</a></li>
+    <li><a href="#wlan">Nutzung im Universit&auml;ts Wlan</a></li>
+    <li><a href="#home">Nutzung von Zuhause</a></li>
+	<li><a href="#about">About</a></li>
+</ul>
+
+<p>
+    <a name="start">
+        <h6>Einleitung</h6>
+        WPKG-GP Client ist ein grafisches Benutzerinterface was es normalen System Benutzer (Ohne Administatoren Rechte)
+		ermöglich die Software auf ihrem System manuell zu aktualisieren. Der Prozess verläuft nach dem Start vollautomatisch
+		im Hintergrund und der Benutzer wird über die Fortschritt der Aktualisierung informiert.<br/> 
+		Geschrieben ist das Programm in Python/wxPython und nutzt für die eigentlich Software Aktualisierung <a href="https://github.com/cleitet/wpkg-gp/wiki">WPKG-GP</a>
+    </a>.
+</p>
+
+<p>
+    <a name="updates">
+        <h6>Update Benachrichtigungen</h6>
+        Das Programm überprüft in einem vom System Administrator festgelegten Interval ob Aktualisierungen für das System vorliegen
+		und benachrichtigt den angemeldeten Benutzer.<br/>
+        Dabei wird jedoch nur nach neueren Versionen für bereits installierte Software-Pakete gesucht, Benachrichtigungen für anstehende
+		Neuinstallationen gibt es (noch) nicht.<br/>
+        Da die Updates-Datenbank unabhängig von der realen Paket Datenbank auf dem Update-Server ist kann es unter Umständen dazu kommen,
+        dass es für bereits anstehende Updates noch keine Benachrichtigungen gibt.<br/>
+        Über das Kontext-Menü in der Taskleiste kann über die Option <u>Check for updates</u> eine manuelle Suche gestartet werden.
+    </a>
+</p>
+
+<p>
+    <a name="upgrade">
+        <h6>System Aktualiserung</h6>
+        Per Doppelklick auf das Taskbar-Icon oder die Option <u>Update System</u> im Kotext-Menü wird das Aktualisierungs Fenster
+        geöffnet. Von hier aus können Sie eine manuelle System Aktualisierung starten.<br/>
+        <br/>
+        <b>Achtung:</b><br/>
+        Schließen Sie Sicherheitshalber alle aktiven Anwendungen und speichern Sie ihre Dokumente da Programme ohne Vorwarnung während
+        einer Aktualisierung geschlossen werden können. In Ausnahmefällen kann es sogar vorkommen, dass das komplette System ohne Benachrichtigung
+        neustartet.
+        <br/><br/>
+        Der Aktuelle Fortschritt der Aktualisierung wird über einen Fortschrittsbalken und einem Textfeld (Aktueller Fortschritt)dargestellt, dieses stellt 
+        aber nur den Fortschritt des kompletten Aktualisierungs Vorgangs da und <u>NICHT</u> den Fortschritt der Installation der individuellen Software.
+        <br/>
+        Der Prozess ist abgeschlossen wenn der Fortschrittsbalken komplett ist und unter Aktueller Fortschritt "WPKG Process Finished" erscheint.
+        Über die Option "View Log" können Sie sich die durchgeführte Arbeiten im Detail aufführen lassen. 
+        
+    </a>
+</p>
+
+<p>
+    <a name="error">
+        <h6>Fehlerbenachrichtigungen</h6>
+        Falls es bei der Aktualisierung des System Fehler bei der Installation einzelner Pakete gegeben hat wird nach dem Abschluss der Aktualisierung
+        automatisch eine Fehlerprotokoll aufgerufen. 
+    </a>
+</p>
+
+<p>
+    <a name="wlan">
+        <h6>Nutzung im Universit&auml;ts Wlan</h6>
+        Um die Aktualisierung über das WLAN der Universät Hamburg durchzuführen wird eine VPN Verbindung per Cisco AnyConnect benötigt.<br/>
+        Die Software erkennt automatisch wenn eine VPN Verbindung besteht und blockiert Aktualisierungen für den AnyConnect Client, diese können
+        nur manuell oder über eine Kabel Verbindung installiert werden.
+    </a>
+</p>
+
+<p>
+    <a name="home">
+        <h6>Nutzung von Zuhause</h6>
+        Durch die Verwendung einer VPN Verbindung (Cisco AnyConnect) ist es theoretisch auch möglich das System außerhalb der Universität zu 
+        aktualisieren. <br/>
+        Davon wird jedoch <u>AUSDRÜCKLICH</u> abgeraten da größere Software Updates über eine Haushaltsübliche Internet Leitung sehr langsam sind
+        und es im schlimmsten fall auch zu Verbindungsabbrüchen kommen kann was während einer Aktualisierung durchaus zu Systemfehlern führen
+        könnte.
+    </a>
+</p>
+
+<p>
+    <a name="about">
+        <h6>About</h6>
+        LOREM IPSUM
+        <br/>
+    </a>
+</p>
+
+</body>
+</html>
