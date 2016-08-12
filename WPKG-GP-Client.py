@@ -18,7 +18,7 @@ _ = wx.GetTranslation
 
 TRAY_TOOLTIP = 'WPKG-GP CLient'
 TRAY_ICON = os.path.join(path,'img', 'apacheconf-16.png')
-VERSION = "0.9.3"
+VERSION = "0.9.4"
 
 # Detect if x86 or AMD64 and set correct path to wpkg.xml
 # The Environment Variable PROCESSOR_ARCHITEW6432 only exists on 64bit Windows
@@ -269,7 +269,7 @@ class RunWPKGDialog(wx.Dialog):
 
         # Info Text
         infotext = _(u'Close all open Applications, it is possible that programs will be closed without a warning '
-                     u'and system could reboot without further conformation.')
+                     u'and system could reboot without further confirmation.')
 
         infobox = wx.StaticBox(self.panel, -1, _(u'Attention'))
         infoboxbsizer = wx.StaticBoxSizer(infobox, wx.VERTICAL)
@@ -316,7 +316,7 @@ class RunWPKGDialog(wx.Dialog):
 
     def OnStartButton(self, e):
         dlg_title = _(u"2. Warning")
-        dlg_msg = _(u"Close all open programs!\n\nThe System could restart without further conformation!\n\n" \
+        dlg_msg = _(u"Close all open programs!\n\nThe System could restart without further confirmation!\n\n" \
                     u"Continue?")
         dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.YES_NO|wx.YES_DEFAULT|wx.ICON_EXCLAMATION)
         if dlg.ShowModal() == wx.ID_YES:
@@ -507,6 +507,7 @@ def main():
     # Translation Configuration
     localedir = os.path.join(path, "locale")
     mylocale = wx.Locale()
+    # Forcing any language to wx.Locale() results in changes of the win32evtlog time format and breaking the parser!
     mylocale.AddCatalogLookupPathPrefix(localedir)
     mylocale.AddCatalog('wpkg-gp-client')
     if client_running():
