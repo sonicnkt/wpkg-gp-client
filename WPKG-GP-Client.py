@@ -11,20 +11,21 @@ from utilities import *
 from help import HelpDialog
 from img import app_images
 
-TRAY_TOOLTIP = 'WPKG-GP User CLient'
-TRAY_ICON = path + 'img\\apacheconf-16.png'
+TRAY_TOOLTIP = 'WPKG-GP CLient'
+TRAY_ICON = os.path.join(path,'img', 'apacheconf-16.png')
 VERSION = "0.9.3"
-
 
 # Detect if x86 or AMD64 and set correct path to wpkg.xml
 # The Environment Variable PROCESSOR_ARCHITEW6432 only exists on 64bit Windows
 if os.environ.get("PROCESSOR_ARCHITEW6432"):
     # Sysnative is needed to access the true System32 folder from a 32bit application (This Python Program)
-    xml_file = "C:\Windows\Sysnative\wpkg.xml"
+    sys_folder = "Sysnative"
     arch = "x64"
 else:
-    xml_file = "C:\Windows\System32\wpkg.xml"
+    sys_folder = "System32"
     arch = "x86"
+xml_file = os.path.join(os.getenv('systemroot'), sys_folder, "wpkg.xml")
+
 
 # Loading and Configuring INI Settings:
 # -------------------------------------
@@ -433,6 +434,7 @@ class RunWPKGDialog(wx.Dialog):
         if error_log:
             log_dlg = ViewLogDialog(title="Fehler bei der Aktualisierung", log=error_log)
             log_dlg.ShowModal()
+            log_dlg.Destroy()
         if reboot and not chk_shutdown and not aborted:
             dlgmsg = u"Neustart Erforderlich!\n\n" \
                      u"Für den Abschluss der Installation(en) ist ein neustart erfoderlich.\n" \
