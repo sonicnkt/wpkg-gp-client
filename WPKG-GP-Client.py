@@ -23,8 +23,13 @@ VERSION = "0.9.4"
 # Detect if x86 or AMD64 and set correct path to wpkg.xml
 # The Environment Variable PROCESSOR_ARCHITEW6432 only exists on 64bit Windows
 if os.environ.get("PROCESSOR_ARCHITEW6432"):
-    # Sysnative is needed to access the true System32 folder from a 32bit application (This Python Program)
-    sys_folder = "Sysnative"
+    if os.environ['PROCESSOR_ARCHITECTURE'] == "AMD64":
+        # If 64bit python on X64
+        sys_folder = "System32"
+    else:
+        # If 32bit python on x64
+        sys_folder = "Sysnative"
+        # Sysnative is needed to access the true System32 folder from a 32bit application (This Python Program)
     arch = "x64"
 else:
     sys_folder = "System32"
