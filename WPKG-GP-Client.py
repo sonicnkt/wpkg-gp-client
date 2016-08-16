@@ -181,13 +181,21 @@ class TaskBarIcon(wx.TaskBarIcon):
         except:
             # Dialog is not opened yet
             # Check if Reboot is Pending
-            reboot_pending = ReadRebootPendingTime()
+            try:
+                reboot_pending = ReadRebootPendingTime()
+            except WindowsError:
+                dlg_title = _('Registry Error')
+                dlg_msg = _('No access to necessary registry key.')
+                dlg = wx.MessageDialog(None, dlg_msg, dlg_title, wx.OK | wx.ICON_ERROR)
+                dlg.ShowModal()
+                dlg.Destroy()
+                return
             if reboot_pending and reboot_pending > self.bootup_time:
-                dlgmsg = _(u"Reboot required!\n\n"
+                dlg_msg = _(u"Reboot required!\n\n"
                            u"A reboot is required before the system\n"
                            u"can be updated again.\n"
                            u"Reboot now?")
-                dlg = wx.MessageDialog(None, dlgmsg, _(u"Reboot required"),
+                dlg = wx.MessageDialog(None, dlg_msg, _(u"Reboot required"),
                                        wx.YES_NO | wx.YES_DEFAULT | wx.ICON_EXCLAMATION)
                 if dlg.ShowModal() == wx.ID_YES:
                     # Initiate Shutdown
