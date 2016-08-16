@@ -370,7 +370,8 @@ class RunWPKGDialog(wx.Dialog):
             if dlg.ShowModal() == wx.ID_NO:
                 # Return Abort True
                 out_msg = 'Process Start canceled by user!'
-                return True, out_msg
+                self.update_box.SetValue(out_msg)
+                return True, None
         # LONG TASK is the PipeConnection to the WPKG-GP Windows Service
         self.running = True
         #msg = 'Execute'
