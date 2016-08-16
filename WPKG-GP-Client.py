@@ -184,8 +184,8 @@ class TaskBarIcon(wx.TaskBarIcon):
             try:
                 reboot_pending = ReadRebootPendingTime()
             except WindowsError:
-                dlg_title = _('Registry Error')
-                dlg_msg = _('No access to necessary registry key.')
+                dlg_title = _(u'Registry Error')
+                dlg_msg = _(u'No access to necessary registry key.')
                 dlg = wx.MessageDialog(None, dlg_msg, dlg_title, wx.OK | wx.ICON_ERROR)
                 dlg.ShowModal()
                 dlg.Destroy()
