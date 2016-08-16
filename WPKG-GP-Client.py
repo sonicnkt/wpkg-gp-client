@@ -24,12 +24,12 @@ VERSION = "0.9.4"
 # The Environment Variable PROCESSOR_ARCHITEW6432 only exists on 64bit Windows
 if os.environ.get("PROCESSOR_ARCHITEW6432"):
     if os.environ['PROCESSOR_ARCHITECTURE'] == "AMD64":
-        # If 64bit python on X64
+        # 64bit python on x64
         sys_folder = "System32"
     else:
-        # If 32bit python on x64
+        # 32bit python on x64
         sys_folder = "Sysnative"
-        # Sysnative is needed to access the true System32 folder from a 32bit application (This Python Program)
+        # Sysnative is needed to access the true System32 folder from a 32bit application
     arch = "x64"
 else:
     sys_folder = "System32"
