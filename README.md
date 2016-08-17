@@ -1,10 +1,11 @@
 # WPKG-GP - Client
-WPKG-GP Client is a small GUI for wpkg-gp that resides in the system tray and informs the user of new updates as well
-as allow normal users to upgrade their system through wpkg without a reboot.
-It is written in python2.7 and also needs the latest wxpython (not phoenix) as well as pywin32 modules to run/compile.
-I will provide precompiled x86 (works on both X64 and X86) binaries so it can be used without any additional software 
-installed.
+WPKG-GP Client is a small **GUI** for **wpkg-gp** that resides in the system tray and allows normal users to perform a wpkg 
+update using the wpkg-gp background service without a reboot as well as inform the user of new updates.
 
-You can find some screenshots (german) in the screenshots folder of the repository. 
+It is written in Python 2.7 and relies on the [wxpython](https://wxpython.org/) (not phoenix) module for the gui part as well as [pywin32](https://sourceforge.net/projects/pywin32/) module for 
+the communication with the wpkg-gp service, windows registry and event log access.
 
-I am currently writing a documentation that explains all features and give more detailed installation instructions
+Precompiled x86 binaries (works on both x64 and x86) are provided on the [releases page](https://github.com/sonicnkt/wpkg-gp-client/releases).
+No additional software has to be installed (Python Environment) except for wpkg-gp of course.
+
+You can find [screenshots](https://github.com/sonicnkt/wpkg-gp-client/wiki/Installation-and-Usage#usage) and detailed instructions in the projects [Wiki](https://github.com/sonicnkt/wpkg-gp-client/wiki).
