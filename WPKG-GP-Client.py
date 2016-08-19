@@ -18,7 +18,7 @@ _ = wx.GetTranslation
 
 TRAY_TOOLTIP = 'WPKG-GP CLient'
 TRAY_ICON = os.path.join(path,'img', 'apacheconf-16.png')
-VERSION = "0.9.4"
+VERSION = "0.9.5"
 
 # Detect if x86 or AMD64 and set correct path to wpkg.xml
 # The Environment Variable PROCESSOR_ARCHITEW6432 only exists on 64bit Windows
@@ -394,7 +394,7 @@ class RunWPKGDialog(wx.Dialog):
             pipeHandle = CreateFile("\\\\.\\pipe\\WPKG", GENERIC_READ|GENERIC_WRITE, 0, None, OPEN_EXISTING, 0, None)
         except pywintypes.error, (n, f, e):
             #print "Error when generating pipe handle: %s" % e
-            out_msg = u"Error: WPKG-GP Service nicht verfügbar."
+            out_msg = u"Error: WPKG-GP Service not running"
             return True, out_msg
 
         SetNamedPipeHandleState(pipeHandle, PIPE_READMODE_MESSAGE, None, None)
@@ -440,6 +440,8 @@ class RunWPKGDialog(wx.Dialog):
                 if message.startswith("Error: Cli"):
                     dlg_msg = _(u"The system was rejected from the server to execute an update!\n"
                                 u"Contact your IT department for further information")
+                if message.startswith("Error: WP"):
+                    dlg_msg = _(u"Can't connect to the wpkg-gp service!\n")
 
                 dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.OK | wx.ICON_ERROR)
                 dlg.ShowModal()
@@ -451,7 +453,7 @@ class RunWPKGDialog(wx.Dialog):
             else:
                 self.update_box.SetValue('WPKG process finished.')
         if error_log:
-            log_dlg = ViewLogDialog(title="Fehler bei der Aktualisierung", log=error_log)
+            log_dlg = ViewLogDialog(title=_(u"Error detected during update"), log=error_log)
             log_dlg.ShowModal()
             log_dlg.Destroy()
         if reboot and not chk_shutdown and not aborted:
