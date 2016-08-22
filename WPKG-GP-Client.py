@@ -203,7 +203,7 @@ class TaskBarIcon(wx.TaskBarIcon):
                 dlg = wx.MessageDialog(None, dlg_msg, _(u"Reboot required"),
                                        wx.YES_NO | wx.YES_DEFAULT | wx.ICON_EXCLAMATION)
                 if dlg.ShowModal() == wx.ID_YES:
-                    # Initiate Shutdown
+                    # Initiate Reboot
                     shutdown(1, time=5, msg=_(u"System will reboot now!"))
                     # Reset Reboot Pending
                     SetRebootPendingTime(reset=True)
