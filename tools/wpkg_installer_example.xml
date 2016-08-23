@@ -18,7 +18,7 @@
 	<check type="uninstall" condition="versiongreaterorequal" path="WPKG-GP Client" value="%version%" />
 
 	<commands>
-		<command type="install" cmd='"%SOFTWARE%\wpkg-gp\client\wpkg-gp-client_v%version%.exe" /silent /norestart /RESTARTEXITCODE=101 /ini="%CLIENTINI%"'>
+		<command type="install" cmd='"%SOFTWARE%\wpkg-gp\client\wpkg-gp-client_v%version%.exe" /silent /SUPPRESSMSGBOXES /norestart /RESTARTEXITCODE=101 /ini="%CLIENTINI%"'>
 			    <exit code="0" />
                 <exit code="101" reboot="postponed" />
 		</command>
