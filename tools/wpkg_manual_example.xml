@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <packages:packages xmlns:packages="http://www.wpkg.org/packages"
 	xmlns:wpkg="http://www.wpkg.org/wpkg" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -10,41 +10,41 @@
     revision="%version%.2"
     reboot="false"
     priority="1" >
-	
+
 	<variable name="version" value="0.9.3" />
 	<variable name="REGPATH" value="HKLM\Software\Microsoft\Windows\CurrentVersion\Run" />
 	<variable name="MENUPATH" value="%PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs" />
 	<variable name="CLIENTINI" value="%SOFTWARE%\wpkg-gp\client\wpkg-gp_client.ini" />
 	<variable name="CLIENTINI" value="%SOFTWARE%\wpkg-gp\client\wpkg-gp_client_test.ini" hostname="^(ET-236-7020-1|pool-218-test|IT-204-7010-1)$" />
-	
+
 	<check type="file" condition="versiongreaterorequal" path="%PROGRAMFILES%\WPKG-GP-Client\WPKG-GP-Client.exe" value="%version%" />
-	
+
 	<commands>
-	<command type="rem_autostart" cmd='reg delete "%REGPATH%" /v "WPKG-GP Client" /f' > 
+	<command type="rem_autostart" cmd='reg delete "%REGPATH%" /v "WPKG-GP Client" /f' >
 		<exit code="0" />
 		<exit code="1" />
 	</command>
 	<command type="add_autostart" cmd='REG ADD "%REGPATH%" /v "WPKG-GP Client" /d "%PROGRAMFILES%\WPKG-GP-Client\WPKG-GP-Client.exe" /t REG_EXPAND_SZ' />
 	<command type="add_reg_key" cmd='REG ADD "HKLM\SOFTWARE\Wpkg-GP-Client" /v "RebootPending" /d "None" /t REG_EXPAND_SZ' />
 	<command type="ch_reg_perm" cmd='regini "%SOFTWARE%\wpkg-gp\client\wpkg-gp-client-registry-perm.ini"' />
-	<command type="rem_reg_key" cmd='reg delete "HKLM\SOFTWARE\Wpkg-GP-Client" /f' > 
+	<command type="rem_reg_key" cmd='reg delete "HKLM\SOFTWARE\Wpkg-GP-Client" /f' >
 		<exit code="0" />
 		<exit code="1" />
 	</command>
-	
+
 
     <!-- ADD KILL CLIENT COMMAND -->
-     
+
 	<command type="install" cmd='xcopy "%SOFTWARE%\wpkg-gp\client\WPKG-GP Client.lnk" "%MENUPATH%" /Y' />
 	<command type="install" cmd='%COMSPEC% /C @%SOFTWARE%\7za.exe x "%SOFTWARE%\wpkg-gp\client\WPKG-GP-Client_v%version%.7z" -o"%PROGRAMFILES%" -y >NUL' />
 	<command type="install" cmd='%COMSPEC% /C copy "%CLIENTINI%" "%PROGRAMFILES%\WPKG-GP-Client\wpkg-gp_client.ini" /Y' />
 	<command type="install" include="add_autostart" />
 	<command type="install" include="add_reg_key" />
 	<command type="install" include="ch_reg_perm" />
-	
+
 	<command type="upgrade" include="remove" />
 	<command type="upgrade" include="install" />
-	
+
 	<command type="remove" cmd='%COMSPEC% /c if exist "%MENUPATH%\WPKG-GP Client.lnk" del "%MENUPATH%\WPKG-GP Client.lnk"' />
 	<command type="remove" cmd='%COMSPEC% /c if exist "%PROGRAMFILES%\WPKG-GP-Client" rmdir /S /Q "%PROGRAMFILES%\WPKG-GP-Client"' />
 	<command type="remove" include="rem_autostart" />

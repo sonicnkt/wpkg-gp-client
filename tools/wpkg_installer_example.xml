@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<packages:packages xmlns:packages="http://www.wpkg.org/packages"
+	xmlns:wpkg="http://www.wpkg.org/wpkg" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.wpkg.org/packages ../xsd/packages.xsd">
+
+<package
+    id="wpkg-gp-client"
+    name="WPKG-GP Client"
+    revision="%version%"
+    reboot="false"
+    priority="1" >
+
+	<variable name="version" value="0.9.6" />
+	<variable name="CLIENTINI" value="%SOFTWARE%\wpkg-gp\client\wpkg-gp_client.ini" />
+	<variable name="CLIENTINI" value="%SOFTWARE%\wpkg-gp\client\wpkg-gp_client_test.ini" hostname="^(ET-236-7020-1|pool-218-test|IT-204-7010-1)$" />
+
+	<check type="uninstall" condition="versiongreaterorequal" path="WPKG-GP Client" value="%version%" />
+
+	<commands>
+		<command type="install" cmd='"%SOFTWARE%\wpkg-gp\client\wpkg-gp-client_v%version%.exe" /silent /norestart /RESTARTEXITCODE=101 /ini="%CLIENTINI%"'>
+			    <exit code="0" />
+                <exit code="101" reboot="postponed" />
+		</command>
+
+		<command type="upgrade" include="install" />
+
+		<command type="remove" cmd='"%PROGRAMFILES%\WPKG-GP Client\unins000.exe" /silent' architecture="x86" />
+		<command type="remove" cmd='"%PROGRAMFILES(X86)%\WPKG-GP Client\unins000.exe" /silent' architecture="x64" />
+	</commands>
+</package>
+</packages:packages>
