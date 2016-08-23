@@ -5,9 +5,9 @@
 ; TODO: Add Installer UI for setting custom INI
 
 ;#define MySourceDir "D:\PY\WPKG-GP-Client\dist\"
-#define MyAppName "WPKG-GP Client"
-;#define MyAppVersion "0.9.5"
-#define MyAppPublisher "Nils Thiele"
+;#define MyAppName "WPKG-GP Client"
+;#define MyAppVersion "0.9.X"
+;#define MyAppPublisher "Nils Thiele"
 #define MyAppURL "https://github.com/sonicnkt/wpkg-gp-client"
 #define MyAppExeName "WPKG-GP-Client.exe"
 
@@ -48,9 +48,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 ;Filename: "{app}\wpkg-gp_client.ini"; Section: "Update Check"; Key: "update url"; String: "https://YOUR_WEB.SERVER/packages.xml"
 
 [Files]
-Source: "{#MySourceDir}WPKG-GP-Client\WPKG-GP-Client.exe"; DestDir: "{app}"; Flags: ignoreversion restartreplace
-Source: "{#MySourceDir}WPKG-GP-Client\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace
-; dont add ini automaticly but only ini example
+Source: "{#MySourceDir}\WPKG-GP-Client\WPKG-GP-Client.exe"; DestDir: "{app}"; Flags: ignoreversion restartreplace
+Source: "{#MySourceDir}\WPKG-GP-Client\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -76,6 +75,11 @@ begin
       FileCopy(ExpandConstant('{param:ini|None}'),ExpandConstant('{app}\wpkg-gp_client.ini'),True);
       // MsgBox('Custom ini installed: ' + ExpandConstant('{param:ini|None}'), mbInformation, MB_OK);
     end;
-    // if no default ini exists? copy example ini to real ini file?
+    // if no default ini exists copy the example ini to the default
+    if not FileExists(ExpandConstant('{app}\wpkg-gp_client.ini')) then begin
+      //MsgBox('No default ini supplied', mbInformation, MB_OK);
+      //copy example ini to default ini
+      FileCopy(ExpandConstant('{app}\wpkg-gp_client_example.ini'),ExpandConstant('{app}\wpkg-gp_client.ini'),True)
+    end;
   end;
 end;
