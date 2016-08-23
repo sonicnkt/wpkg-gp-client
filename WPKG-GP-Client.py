@@ -18,7 +18,7 @@ _ = wx.GetTranslation
 
 TRAY_TOOLTIP = 'WPKG-GP CLient'
 TRAY_ICON = os.path.join(path,'img', 'apacheconf-16.png')
-VERSION = "0.9.5"
+#VERSION = "0.9.5" # Not needed atm
 
 # Detect if x86 or AMD64 and set correct path to wpkg.xml
 # The Environment Variable PROCESSOR_ARCHITEW6432 only exists on 64bit Windows
@@ -207,7 +207,6 @@ class TaskBarIcon(wx.TaskBarIcon):
                     shutdown(1, time=5, msg=_(u"System will reboot now!"))
                     # Reset Reboot Pending
                     SetRebootPendingTime(reset=True)
-                    exit()
                     return
                 else:
                     return
@@ -531,6 +530,7 @@ def main():
         dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         return
+    # TODO: Move load config here to display wxpython dialog if ini is missing?
     TaskBarIcon()
     app.MainLoop()
 
