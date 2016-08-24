@@ -21,11 +21,27 @@ msi_exit_dic = {"1619": "ERROR_INSTALL_PACKAGE_OPEN_FAILED",
 
 
 def client_running():
+    # Use psutils library instead?
     n = 0
     prog=[line.split() for line in check_output("tasklist", creationflags=0x08000000).splitlines()]
-    [prog.pop(e) for e in [0,1,2]] #clean up output and remove unwanted lines
+    [prog.pop(0) for e in [0,1,2,3]] #clean up output and remove unwanted lines
+    clienttasklist = []
+    sessionid = None
     for entry in prog:
         if 'WPKG-GP-Client.exe' == entry[0]:
+            #store all instances of the client and its session id
+            if len(entry) == 5:
+                clienttasklist.append((entry[0], entry[2]))
+            else:
+                clienttasklist.append((entry[0], entry[3]))
+        if 'tasklist.exe' == entry[0]:
+            # setting sessionid of this session
+            sessionid = entry[3]
+        else:
+            continue
+    for entry in clienttasklist:
+        if entry[1] == sessionid:
+            # if session id is the same of this session count it as instance
             n += 1
         else:
             continue
