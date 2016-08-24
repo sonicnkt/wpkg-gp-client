@@ -381,7 +381,7 @@ class RunWPKGDialog(wx.Dialog):
             dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_INFORMATION)
             if dlg.ShowModal() == wx.ID_NO:
                 # Return Abort True
-                out_msg = 'Process Start canceled by user!'
+                out_msg = 'WPKG process start canceled by user.'
                 self.update_box.SetValue(out_msg)
                 return True, None
         # LONG TASK is the PipeConnection to the WPKG-GP Windows Service
@@ -406,15 +406,17 @@ class RunWPKGDialog(wx.Dialog):
                 percentage = getPercentage(out)
                 wx.CallAfter(self.gauge.SetValue, percentage)
                 print out
-                if out.startswith("Error"):
+
+                if out.startswith('Error') or out.startswith('Info'):
                     out_msg = out
                     self.shouldAbort = True
+                    # TODO: ADD - You are not authorized to run wpkg
+
             except win32api.error as exc:
                 if exc.winerror == winerror.ERROR_PIPE_BUSY:
                     win32api.Sleep(5000)
                     print 'Pipe Busy Error'
                     continue
-                # WPKG PROCESS FINISHED
                 break
 
         return self.shouldAbort, out_msg
@@ -432,17 +434,23 @@ class RunWPKGDialog(wx.Dialog):
             self.chk_shutdown.SetValue(False)
             if message:
                 self.update_box.SetValue(message)
-                dlg_title = _(u"Connection error")
-                dlg_msg = ''
+                dlg_title = _(u"WPKG-GP Notification")
+                dlg_icon = wx.ICON_INFORMATION
                 if message.startswith("Error: Con"):
                     dlg_msg = _(u"The update server could not be reached!")
-                if message.startswith("Error: Cli"):
+                    dlg_icon = wx.ICON_ERROR
+                elif message.startswith("Error: WP"):
+                    dlg_msg = _(u"Can't connect to the wpkg-gp service!")
+                    dlg_icon = wx.ICON_ERROR
+                elif message.startswith("Info: Cli"):
                     dlg_msg = _(u"The system was rejected from the server to execute an update!\n"
                                 u"Contact your IT department for further information")
-                if message.startswith("Error: WP"):
-                    dlg_msg = _(u"Can't connect to the wpkg-gp service!\n")
-
-                dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.OK | wx.ICON_ERROR)
+                elif message.startswith(u"Info: You are not"):
+                    dlg_msg = _(u"You are not authorized to execute a wpkg update!\n"
+                                u"Contact your IT department for further information")
+                else:
+                    dlg_msg = _(u'Unknown problem occured')
+                dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.OK | dlg_icon)
                 dlg.ShowModal()
             else:
                 self.update_box.SetValue('WPKG Process Aborted.')
@@ -494,9 +502,7 @@ class ViewLogDialog(wx.Dialog):
     def __init__(self, title='Temp', log="Temp"):
         """Constructor"""
         wx.Dialog.__init__(self, None, title=title, style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
-
         self.log = "\n".join(log)
-
         self.InitUI()
         self.SetSize((640, 480))
 
@@ -510,7 +516,6 @@ class ViewLogDialog(wx.Dialog):
         self.sizer.Add(self.textbox, 1, wx.ALL | wx.EXPAND, 5)
         self.panel.SetSizerAndFit(self.sizer)
         self.Center()
-
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def OnClose(self, evt):
@@ -526,6 +531,8 @@ def main():
     mylocale.AddCatalogLookupPathPrefix(localedir)
     mylocale.AddCatalog('wpkg-gp-client')
     if client_running():
+        # Is True if even another user is running the client.
+
         dlgmsg = _(u"An instance of WPKG-GP Client is allready running!")
         dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
