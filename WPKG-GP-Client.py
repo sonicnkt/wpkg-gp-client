@@ -437,19 +437,19 @@ class RunWPKGDialog(wx.Dialog):
                 dlg_title = _(u"WPKG-GP Notification")
                 dlg_icon = wx.ICON_INFORMATION
                 if message.startswith("Error: Con"):
-                    dlg_msg = _(u"The update server could not be reached!")
+                    dlg_msg = _(u"The update server could not be reached.")
                     dlg_icon = wx.ICON_ERROR
                 elif message.startswith("Error: WP"):
-                    dlg_msg = _(u"Can't connect to the wpkg-gp service!")
+                    dlg_msg = _(u"Can't connect to the wpkg-gp service.")
                     dlg_icon = wx.ICON_ERROR
                 elif message.startswith("Info: Cli"):
                     dlg_msg = _(u"The system was rejected from the server to execute an update!\n"
-                                u"Contact your IT department for further information")
+                                u"Contact your IT department for further information.")
                 elif message.startswith(u"Info: You are not"):
                     dlg_msg = _(u"You are not authorized to execute a wpkg update!\n"
-                                u"Contact your IT department for further information")
+                                u"Contact your IT department for further information.")
                 else:
-                    dlg_msg = _(u'Unknown problem occured')
+                    dlg_msg = _(u'Unknown problem occured.')
                 dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.OK | dlg_icon)
                 dlg.ShowModal()
             else:
@@ -531,8 +531,6 @@ def main():
     mylocale.AddCatalogLookupPathPrefix(localedir)
     mylocale.AddCatalog('wpkg-gp-client')
     if client_running():
-        # Is True if even another user is running the client.
-
         dlgmsg = _(u"An instance of WPKG-GP Client is allready running!")
         dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
