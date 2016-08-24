@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: BUG-EMAIL-ADDR <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: yyyy-mm-dd hh:mm+0000\n"
-"PO-Revision-Date: 2016-08-19 15:03+0100\n"
+"PO-Revision-Date: 2016-08-24 14:58+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -59,7 +59,7 @@ msgstr ""
 msgid "Cancel shutdown"
 msgstr ""
 
-#: WPKG-GP-Client.py:127 WPKG-GP-Client.py:484
+#: WPKG-GP-Client.py:127 WPKG-GP-Client.py:491
 msgid "Close"
 msgstr ""
 
@@ -96,7 +96,7 @@ msgid ""
 "Reboot now?"
 msgstr ""
 
-#: WPKG-GP-Client.py:203 WPKG-GP-Client.py:460
+#: WPKG-GP-Client.py:203 WPKG-GP-Client.py:467
 msgid "Reboot required"
 msgstr ""
 
@@ -104,49 +104,49 @@ msgstr ""
 msgid "System will reboot now!"
 msgstr ""
 
-#: WPKG-GP-Client.py:218
+#: WPKG-GP-Client.py:217
 msgid "System Update"
 msgstr ""
 
-#: WPKG-GP-Client.py:233
+#: WPKG-GP-Client.py:232
 msgid "WPKG-GP Client - Help"
 msgstr ""
 
-#: WPKG-GP-Client.py:284
+#: WPKG-GP-Client.py:283
 msgid ""
 "Close all open Applications, it is possible that programs will be closed "
 "without a warning and system could reboot without further confirmation."
 msgstr ""
 
-#: WPKG-GP-Client.py:287 WPKG-GP-Client.py:377
+#: WPKG-GP-Client.py:286 WPKG-GP-Client.py:376
 msgid "Attention"
 msgstr ""
 
-#: WPKG-GP-Client.py:294
+#: WPKG-GP-Client.py:293
 msgid "Current Progress:"
 msgstr ""
 
-#: WPKG-GP-Client.py:297
+#: WPKG-GP-Client.py:296
 msgid "Shutdown after update"
 msgstr ""
 
-#: WPKG-GP-Client.py:300
+#: WPKG-GP-Client.py:299
 msgid "Open WPKG Log"
 msgstr ""
 
-#: WPKG-GP-Client.py:302
+#: WPKG-GP-Client.py:301
 msgid "Update"
 msgstr ""
 
-#: WPKG-GP-Client.py:303 WPKG-GP-Client.py:351
+#: WPKG-GP-Client.py:302 WPKG-GP-Client.py:350
 msgid "Cancel"
 msgstr ""
 
-#: WPKG-GP-Client.py:331
+#: WPKG-GP-Client.py:330
 msgid "2. Warning"
 msgstr ""
 
-#: WPKG-GP-Client.py:332
+#: WPKG-GP-Client.py:331
 msgid ""
 "Close all open programs!\n"
 "\n"
@@ -155,7 +155,7 @@ msgid ""
 "Continue?"
 msgstr ""
 
-#: WPKG-GP-Client.py:352
+#: WPKG-GP-Client.py:351
 msgid ""
 "System update in progress!\n"
 "\n"
@@ -163,7 +163,7 @@ msgid ""
 "Cancel?"
 msgstr ""
 
-#: WPKG-GP-Client.py:378
+#: WPKG-GP-Client.py:377
 msgid ""
 "System detected a active VPN Connection using Cisco Anyconnect\n"
 "This could result in slow upgrade progress and updates for the AnyConnect\n"
@@ -171,29 +171,39 @@ msgid ""
 "Continue?"
 msgstr ""
 
-#: WPKG-GP-Client.py:436
-msgid "Connection error"
+#: WPKG-GP-Client.py:437
+msgid "WPKG-GP Notification"
 msgstr ""
 
-#: WPKG-GP-Client.py:439
-msgid "The update server could not be reached!"
+#: WPKG-GP-Client.py:440
+msgid "The update server could not be reached."
 msgstr ""
 
-#: WPKG-GP-Client.py:441
+#: WPKG-GP-Client.py:443
+msgid "Can't connect to the wpkg-gp service."
+msgstr ""
+
+#: WPKG-GP-Client.py:446
 msgid ""
 "The system was rejected from the server to execute an update!\n"
-"Contact your IT department for further information"
+"Contact your IT department for further information."
 msgstr ""
 
-#: WPKG-GP-Client.py:444
-msgid "Can't connect to the wpkg-gp service!\n"
+#: WPKG-GP-Client.py:449
+msgid ""
+"You are not authorized to execute a wpkg update!\n"
+"Contact your IT department for further information."
 msgstr ""
 
-#: WPKG-GP-Client.py:456
+#: WPKG-GP-Client.py:452
+msgid "Unknown problem occured."
+msgstr ""
+
+#: WPKG-GP-Client.py:463
 msgid "Error detected during update"
 msgstr ""
 
-#: WPKG-GP-Client.py:461
+#: WPKG-GP-Client.py:468
 msgid ""
 "Reboot required!\n"
 "\n"
@@ -201,18 +211,18 @@ msgid ""
 "Reboot now?"
 msgstr ""
 
-#: WPKG-GP-Client.py:467
+#: WPKG-GP-Client.py:474
 msgid "System will reboot in %TIME% seconds."
 msgstr ""
 
-#: WPKG-GP-Client.py:475
+#: WPKG-GP-Client.py:482
 msgid "System will shutdown in %TIME% seconds."
 msgstr ""
 
-#: WPKG-GP-Client.py:482
+#: WPKG-GP-Client.py:489
 msgid "No System changes."
 msgstr ""
 
-#: WPKG-GP-Client.py:530
+#: WPKG-GP-Client.py:536
 msgid "An instance of WPKG-GP Client is allready running!"
 msgstr ""
