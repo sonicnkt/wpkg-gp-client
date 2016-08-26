@@ -273,7 +273,10 @@ class RunWPKGDialog(wx.Dialog):
         self.reboot_scheduled = False
         self.log = ""
         self.InitUI()
-        self.SetSize((410, 273))
+        size_y = self.GetEffectiveMinSize()[1]
+        #self.SetSize(size)
+        self.SetSize((410, size_y))
+        #self.SetSize((410, 273))
 
     def InitUI(self):
 
@@ -527,6 +530,7 @@ def main():
     # Translation Configuration
     localedir = os.path.join(path, "locale")
     mylocale = wx.Locale()
+    #mylocale = wx.Locale(wx.LANGUAGE_SPANISH)
     # Forcing any language to wx.Locale() results in changes of the win32evtlog time format and breaking the parser!
     mylocale.AddCatalogLookupPathPrefix(localedir)
     mylocale.AddCatalog('wpkg-gp-client')
