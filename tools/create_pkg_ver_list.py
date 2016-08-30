@@ -6,9 +6,9 @@ import xmlpp
 from operator import itemgetter
 import argparse
 
-parser = argparse.ArgumentParser(description='WPKG Package List Generator')
-parser.add_argument('-f', '--folder', help='Input folder', required=True)
-parser.add_argument('-o', '--output', help='Output file', required=True)
+parser = argparse.ArgumentParser(description='WPKG-GP Client updates list generator')
+parser.add_argument('-f', '--folder', help='WPKG root directory', required=True)
+parser.add_argument('-o', '--output', help='Output filename', required=True)
 args = parser.parse_args()
 
 input_folder = args.folder
@@ -26,8 +26,8 @@ def create_package_list(path):
             return (variable, value)
         except TypeError:
             return (variable, value)
-
-    xmls = [(os.path.join(dp, f), f[:-4]) for dp, dn, fn in os.walk(os.path.expanduser(path)) for f in fn if f.endswith('.xml')]
+    packages_dir = os.path.join(path, 'packages')
+    xmls = [(os.path.join(dp, f), f[:-4]) for dp, dn, fn in os.walk(os.path.expanduser(packages_dir)) for f in fn if f.endswith('.xml')]
     '''
     every directory in the specified path holds a tuple with 3 list of information that os.walk spits out
     dp = current directory path
@@ -37,22 +37,28 @@ def create_package_list(path):
     The listcomprehension above gets the info of every directory and if the filenames in the directories end with .xml it will store
     it in another tuple together with complete path to the file
     '''
+    xmls.append([os.path.join(path, 'packages.xml'), ""])
     remote_packages = []
     for entry in xmls:
-        tree = ET.parse(entry[0])
-        root = tree.getroot()
-        for child in root.iter('package'):
-            pkg_id = child.attrib['id']
-            if pkg_id == "ShortPackageID":
-                continue
-            pkg_version = child.attrib['revision']
-            if '%' in pkg_version:
-                variable, value = resolve_version(child, pkg_version)
-                if '%' in value:
-                    variable2, value2 = resolve_version(child, value)
-                    value = re.sub(variable2, value2, value)
-                pkg_version = re.sub (variable, value, pkg_version)
-            remote_packages.append((pkg_id, pkg_version))
+        try:
+            tree = ET.parse(entry[0])
+        except IOError, e:
+            print e
+            continue
+        else:
+            root = tree.getroot()
+            for child in root.iter('package'):
+                pkg_id = child.attrib['id']
+                if pkg_id == "ShortPackageID":
+                    continue
+                pkg_version = child.attrib['revision']
+                if '%' in pkg_version:
+                    variable, value = resolve_version(child, pkg_version)
+                    if '%' in value:
+                        variable2, value2 = resolve_version(child, value)
+                        value = re.sub(variable2, value2, value)
+                    pkg_version = re.sub (variable, value, pkg_version)
+                remote_packages.append((pkg_id, pkg_version))
 
     remote_packages = sorted(remote_packages, key=itemgetter(0)) # Sort the List
     return remote_packages
