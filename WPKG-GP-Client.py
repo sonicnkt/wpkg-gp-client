@@ -47,6 +47,9 @@ last_upgrade_interval = LoadSetting('General', 'last update interval')
 if not isinstance(last_upgrade_interval, (int, long)):
     last_upgrade_interval = 14
 check_vpn = LoadSetting('General', 'check vpn')
+shutdown_timeout = LoadSetting('General', 'shutdown timeout')
+if not isinstance(shutdown_timeout, (int, long)):
+    shutdown_timeout = 30
 
 update_startup = LoadSetting('Update Check', 'startup')
 update_interval = LoadSetting('Update Check', 'interval')
@@ -57,6 +60,8 @@ else:
     update_interval = False
 update_url = LoadSetting('Update Check', 'update url')
 check_bootup_log = LoadSetting('General', 'check boot log')
+
+
 
 # Load Image Class
 img = app_images(path)
@@ -474,7 +479,7 @@ class RunWPKGDialog(wx.Dialog):
             dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
                 # Initiate Shutdown
-                shutdown(1, time=20, msg=_(u'System will reboot in %TIME% seconds.'))
+                shutdown(1, time=shutdown_timeout, msg=_(u'System will reboot in %TIME% seconds.'))
                 self.reboot_scheduled = True
                 self.Close()
             else:
@@ -482,7 +487,7 @@ class RunWPKGDialog(wx.Dialog):
                 SetRebootPendingTime()
         elif reboot or chk_shutdown and not aborted:
             # TODO: DEBUG DIALOG INFO
-            shutdown(2, msg=_(u'System will shutdown in %TIME% seconds.'))
+            shutdown(2, time=shutdown_timeout, msg=_(u'System will shutdown in %TIME% seconds.'))
             if reboot:
                 self.reboot_scheduled = True
             else:
