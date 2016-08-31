@@ -1,6 +1,7 @@
 import wx
 import wx.html
 import webbrowser
+import markdown2
 
 class HelpDialog(wx.Dialog):
     def __init__(self, helpFile, title='Temp'):
@@ -23,7 +24,10 @@ class HelpDialog(wx.Dialog):
         #file = codecs.open(self.help, "r", "utf-8")
         file = open(self.help, "r")
         test = file.read().decode("utf-8")
-        help.SetPage(test)
+        html = markdown2.markdown(test, extras=["tables"])
+        html = '<body bgcolor="#f0f0f5">' + html
+        #print html
+        help.SetPage(html)
         sizer.Add(help, 1, wx.EXPAND)
         self.panel.SetSizerAndFit(sizer)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
@@ -43,11 +47,11 @@ class HelpDialog(wx.Dialog):
     def OnClose(self, e):
         self.Destroy()
 
-#class MyApp(wx.App):
-#    def OnInit(self):
-#        frame = HelpDialog('help.html', title='Student-DB - Hilfe')
-#        frame.Show(True)
-#        return True
-#
-#app = MyApp(0)
-#app.MainLoop()
+class MyApp(wx.App):
+    def OnInit(self):
+        frame = HelpDialog('help.md', title='WPKG-GP-Client - Help')
+        frame.Show(True)
+        return True
+
+app = MyApp(0)
+app.MainLoop()
