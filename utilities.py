@@ -24,7 +24,7 @@ def client_running():
     # Use psutils library instead?
     n = 0
     prog=[line.split() for line in check_output("tasklist", creationflags=0x08000000).splitlines()]
-    [prog.pop(0) for e in [0,1,2,3]] #clean up output and remove unwanted lines
+    [prog.pop(0) for _ in [0,1,2,3]] #clean up output and remove unwanted lines
     clienttasklist = []
     sessionid = None
     for entry in prog:
@@ -166,7 +166,6 @@ def get_local_packages(xml_path):
     return local_packages
 
 def get_remote_packages(url):
-    proxy = {"https" : "https://proxy.uni-hamburg.de:3128" }
     e = None
     try:
         xml = urlopen(url, timeout=5).read()

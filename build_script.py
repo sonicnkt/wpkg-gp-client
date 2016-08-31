@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 # WPKG-GP Client BUILD SCRIPT
 
-VERSION = "0.9.6.3" # str + max 4 numbers seperated by a "."
+VERSION = "0.9.6.3" # str + max 4 number values seperated by a "."
 NAME = "WPKG-GP Client" # Application Name
 AUTHOR = "Nils Thiele"
 INNOSETUPCMD = r'%PROGRAMFILES(X86)%\Inno Setup 5\iscc.exe' # Inno Setup with PreProcessor Support!
@@ -56,7 +56,7 @@ def v_convert(ver_str):
         print ver
     elif len(ver) < 4:
         add = 4 - len(ver)
-        for n in range(0, add):
+        for _ in range(0, add):
             ver.append('0')
     new_ver_str = ' ,'.join(ver)
     return new_ver_str
