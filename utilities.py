@@ -11,7 +11,8 @@ import re
 import string
 import traceback
 import datetime
-from load_config import *
+import os
+import sys
 from subprocess import Popen, PIPE, call, check_output
 
 
@@ -19,6 +20,29 @@ msi_exit_dic = {"1619": "ERROR_INSTALL_PACKAGE_OPEN_FAILED",
                 "1612": "ERROR_INSTALL_SOURCE_ABSENT"}
 
 
+def get_client_path():
+    # Get Executable Path:
+    pathname = os.path.dirname(sys.argv[0])
+    path = os.path.abspath(pathname) + os.sep
+    return path
+
+def get_wpkg_db():
+    # Detect if x86 or AMD64 and set correct path to wpkg.xml
+    # The Environment Variable PROCESSOR_ARCHITEW6432 only exists on 64bit Windows
+    if os.environ.get("PROCESSOR_ARCHITEW6432"):
+        if os.environ['PROCESSOR_ARCHITECTURE'] == "AMD64":
+            # 64bit python on x64
+            sys_folder = "System32"
+        else:
+            # 32bit python on x64
+            sys_folder = "Sysnative"
+            # Sysnative is needed to access the true System32 folder from a 32bit application
+        arch = "x64"
+    else:
+        sys_folder = "System32"
+        arch = "x86"
+    xml_file = os.path.join(os.getenv('systemroot'), sys_folder, "wpkg.xml")
+    return xml_file, arch
 
 def client_running():
     # Use psutils library instead?
