@@ -7,65 +7,55 @@ from win32file import *
 import pywintypes
 import win32api
 #import winerror
+import load_config
 from utilities import *
 from help import HelpDialog
-from img import app_images
+from img import AppImages
 
-# Trasnlation Function
+# set translation function
 _ = wx.GetTranslation
 #if you are getting unicode errors, try something like:
 #_ = lambda s: wx.GetTranslation(s).encode('utf-8')
 
-TRAY_TOOLTIP = 'WPKG-GP CLient'
-TRAY_ICON = os.path.join(path,'img', 'apacheconf-16.png')
-#VERSION = "0.9.5" # Not needed atm
+# get program path
+path = get_client_path()
 
-# Detect if x86 or AMD64 and set correct path to wpkg.xml
-# The Environment Variable PROCESSOR_ARCHITEW6432 only exists on 64bit Windows
-if os.environ.get("PROCESSOR_ARCHITEW6432"):
-    if os.environ['PROCESSOR_ARCHITECTURE'] == "AMD64":
-        # 64bit python on x64
-        sys_folder = "System32"
+# load Image class
+img = AppImages(path)
+
+# set path to wpkg.xml and get system architecture
+xml_file, arch = get_wpkg_db()
+
+# Loading and setting INI settings:
+# ---------------------------------
+try:
+    ini = load_config.ConfigIni(os.path.join(path, 'wpkg-gp_client.ini'))
+except load_config.NoConfigFile:
+    # Config file could not be opened!
+    no_config = True
+else:
+    no_config = False
+    # General
+    allow_quit = ini.loadsetting('General', 'allow quit')
+    check_last_upgrade = ini.loadsetting('General', 'check last update')
+    last_upgrade_interval = ini.loadsetting('General', 'last update interval')
+    if not isinstance(last_upgrade_interval, (int, long)):
+        last_upgrade_interval = 14
+    check_vpn = ini.loadsetting('General', 'check vpn')
+    shutdown_timeout = ini.loadsetting('General', 'shutdown timeout')
+    if not isinstance(shutdown_timeout, (int, long)):
+        shutdown_timeout = 30
+    help_file = ini.loadsetting('General', 'help file')
+    # Update Check
+    update_startup = ini.loadsetting('Update Check', 'startup')
+    update_interval = ini.loadsetting('Update Check', 'interval')
+    if isinstance(update_interval, (int, long)):
+        # Transform Minutes to Milliseconds
+        update_interval = update_interval * 60 * 1000
     else:
-        # 32bit python on x64
-        sys_folder = "Sysnative"
-        # Sysnative is needed to access the true System32 folder from a 32bit application
-    arch = "x64"
-else:
-    sys_folder = "System32"
-    arch = "x86"
-xml_file = os.path.join(os.getenv('systemroot'), sys_folder, "wpkg.xml")
-
-
-# Loading and Configuring INI Settings:
-# -------------------------------------
-
-allow_quit = LoadSetting('General', 'allow quit')
-# Last Update Check
-check_last_upgrade = LoadSetting('General', 'check last update')
-last_upgrade_interval = LoadSetting('General', 'last update interval')
-if not isinstance(last_upgrade_interval, (int, long)):
-    last_upgrade_interval = 14
-check_vpn = LoadSetting('General', 'check vpn')
-shutdown_timeout = LoadSetting('General', 'shutdown timeout')
-if not isinstance(shutdown_timeout, (int, long)):
-    shutdown_timeout = 30
-help_file = LoadSetting('General', 'help file')
-
-update_startup = LoadSetting('Update Check', 'startup')
-update_interval = LoadSetting('Update Check', 'interval')
-if isinstance(update_interval, (int, long)):
-    # Transform Minutes to Milliseconds
-    update_interval = update_interval * 60 * 1000
-else:
-    update_interval = False
-update_url = LoadSetting('Update Check', 'update url')
-check_bootup_log = LoadSetting('General', 'check boot log')
-
-
-
-# Load Image Class
-img = app_images(path)
+        update_interval = False
+    update_url = ini.loadsetting('Update Check', 'update url')
+    check_bootup_log = ini.loadsetting('General', 'check boot log')
 
 
 def create_menu_item(menu, label, image, func):
@@ -77,10 +67,14 @@ def create_menu_item(menu, label, image, func):
 
 
 class TaskBarIcon(wx.TaskBarIcon):
-    def __init__(self):
+    def __init__(self, trayicon, tooltip):
         super(TaskBarIcon, self).__init__()
         self.show_no_updates = False
-        self.set_icon(TRAY_ICON)
+
+        # Set trayicon and tooltip
+        icon = wx.IconFromBitmap(wx.Bitmap(trayicon))
+        self.SetIcon(icon, tooltip)
+
         self.Bind(wx.EVT_TASKBAR_LEFT_DCLICK, self.on_upgrade)
         self.Bind(wx.EVT_TASKBAR_BALLOON_CLICK, self.on_bubble)
         self.upd_error_count = 0
@@ -132,10 +126,6 @@ class TaskBarIcon(wx.TaskBarIcon):
             menu.AppendSeparator()
             create_menu_item(menu, _(u"Close"), "quit", self.on_exit)
         return menu
-
-    def set_icon(self, path):
-        icon = wx.IconFromBitmap(wx.Bitmap(path))
-        self.SetIcon(icon, TRAY_TOOLTIP)
 
     def manual_timer(self, evt):
         self.show_no_updates = True
@@ -238,17 +228,6 @@ class TaskBarIcon(wx.TaskBarIcon):
         helpdlg = HelpDialog(helpfile, title=_(u'WPKG-GP Client - Help'))
         helpdlg.Center()
         helpdlg.ShowModal()
-        #info = wx.AboutDialogInfo()
-        #info.Name = "WPKG-GP Client"
-        #info.Version = VERSION
-        #info.Copyright = "(C) 2016 Nils Thiele"
-        #info.Description = u"WPKG-GP Client ist ein GUI Tool für den WPKG-GP Service\n" \
-        #                   u"geschrieben in Python/wxPython"
-        ## info.WebSite = ("http://www.pythonlibrary.org", "My Home Page")
-        #info.Developers = ["Nils Thiele"]
-        #info.License = "Completely and totally open source!"
-        ## Show the wx.AboutBox
-        #wx.AboutBox(info)
 
     def on_cancleshutdown(self, event):
         if self.reboot_scheduled:
@@ -316,8 +295,6 @@ class RunWPKGDialog(wx.Dialog):
         self.startButton.Bind(wx.EVT_BUTTON, self.OnStartButton)
         self.abortButton.Bind(wx.EVT_BUTTON, self.OnAbortButton)
         self.logButton.Bind(wx.EVT_BUTTON, self.OnLogButton)
-
-        #self.Bind(wx.EVT_CLOSE, self.OnClose)
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer2 = wx.BoxSizer(wx.HORIZONTAL)
@@ -517,7 +494,6 @@ class ViewLogDialog(wx.Dialog):
 
 
     def InitUI(self):
-
         self.panel = wx.Panel(self, wx.ID_ANY)
         self.textbox = wx.TextCtrl(self.panel, style=wx.TE_MULTILINE | wx.TE_READONLY)
         self.textbox.SetValue(self.log)
@@ -531,23 +507,31 @@ class ViewLogDialog(wx.Dialog):
         self.Destroy()
 
 
-def main():
+if __name__ == '__main__':
     app = wx.App(False)
-    # Translation Configuration
+    # Translation configuration
     localedir = os.path.join(path, "locale")
     mylocale = wx.Locale()
     #mylocale = wx.Locale(wx.LANGUAGE_SPANISH)
     # Forcing any language to wx.Locale() results in changes of the win32evtlog time format and breaking the parser!
     mylocale.AddCatalogLookupPathPrefix(localedir)
     mylocale.AddCatalog('wpkg-gp-client')
+
+    # If an instance of WPKG-GP Client is running already in the users session
     if client_running():
-        dlgmsg = _(u"An instance of WPKG-GP Client is allready running!")
+        dlgmsg = _(u"An instance of WPKG-GP Client is already running!")
         dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
-        return
-    # TODO: Move load config here to display wxpython dialog if ini is missing?
-    TaskBarIcon()
+        exit()
+    # If config file could not be opened
+    if no_config:
+        dlgmsg = _(u'Can\'t open config file "{}"!').format("wpkg-gp_client.ini")
+        dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_ERROR)
+        dlg.ShowModal()
+        exit(1)
+
+    TRAY_TOOLTIP = 'WPKG-GP Client'
+    TRAY_ICON = os.path.join(path, 'img', 'apacheconf-16.png')
+    TaskBarIcon(trayicon=TRAY_ICON, tooltip=TRAY_TOOLTIP)
     app.MainLoop()
 
-if __name__ == '__main__':
-    main()
