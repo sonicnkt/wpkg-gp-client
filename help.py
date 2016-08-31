@@ -22,15 +22,23 @@ class HelpDialog(wx.Dialog):
         # http://wxpython-users.1045709.n5.nabble.com/Open-a-URL-with-the-default-browser-from-an-HtmlWindow-td2326349.html
         #import codecs
         #file = codecs.open(self.help, "r", "utf-8")
-        file = open(self.help, "r")
-        test = file.read().decode("utf-8")
-        html = markdown2.markdown(test, extras=["tables"])
-        html = '<body bgcolor="#f0f0f5">' + html
-        #print html
-        help.SetPage(html)
-        sizer.Add(help, 1, wx.EXPAND)
-        self.panel.SetSizerAndFit(sizer)
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
+        try:
+            file = open(self.help, "r")
+        except IOError:
+            dlgmsg = u"File not found: \"{}\"".format(self.help)
+            dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_ERROR)
+            dlg.ShowModal()
+            dlg.Destroy()
+            self.Destroy()
+        else:
+            test = file.read().decode("utf-8")
+            html = markdown2.markdown(test, extras=["tables"])
+            html = '<body bgcolor="#f0f0f5">' + html
+            #print html
+            help.SetPage(html)
+            sizer.Add(help, 1, wx.EXPAND)
+            self.panel.SetSizerAndFit(sizer)
+            self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def OnLinkClicked(self, link):
         # If Link is an anchor link let the html window do its job
