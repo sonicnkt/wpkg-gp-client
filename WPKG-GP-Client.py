@@ -50,6 +50,7 @@ check_vpn = LoadSetting('General', 'check vpn')
 shutdown_timeout = LoadSetting('General', 'shutdown timeout')
 if not isinstance(shutdown_timeout, (int, long)):
     shutdown_timeout = 30
+help_file = LoadSetting('General', 'help file')
 
 update_startup = LoadSetting('Update Check', 'startup')
 update_interval = LoadSetting('Update Check', 'interval')
@@ -233,7 +234,7 @@ class TaskBarIcon(wx.TaskBarIcon):
                 self.timer.Start()
 
     def on_about(self, evt):
-        helpfile = os.path.join(path + 'help.html')
+        helpfile = os.path.join(path + help_file)
         helpdlg = HelpDialog(helpfile, title=_(u'WPKG-GP Client - Help'))
         helpdlg.Center()
         helpdlg.ShowModal()
