@@ -127,7 +127,6 @@ def vpn_connected(arch="x64"):
     p = Popen('"{}" -s state'.format(vpn_path), stdout=PIPE, stderr=PIPE, shell=True)
     out, err = p.communicate()
     if err:
-        print 'error'
         print err # TODO: DEBUG
         return False
     else:

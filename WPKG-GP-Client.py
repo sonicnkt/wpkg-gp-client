@@ -518,18 +518,19 @@ if __name__ == '__main__':
     mylocale.AddCatalogLookupPathPrefix(localedir)
     mylocale.AddCatalog('wpkg-gp-client')
 
-    # If an instance of WPKG-GP Client is running already in the users session
-    if client_running():
-        dlgmsg = _(u"An instance of WPKG-GP Client is already running!")
-        dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_INFORMATION)
-        dlg.ShowModal()
-        exit()
     # If config file could not be opened
     if no_config:
         dlgmsg = _(u'Can\'t open config file "{}"!').format("wpkg-gp_client.ini")
         dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_ERROR)
         dlg.ShowModal()
         exit(1)
+
+    # If an instance of WPKG-GP Client is running already in the users session
+    if client_running():
+        dlgmsg = _(u"An instance of WPKG-GP Client is already running!")
+        dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_INFORMATION)
+        dlg.ShowModal()
+        exit()
 
     TRAY_TOOLTIP = 'WPKG-GP Client'
     TRAY_ICON = os.path.join(path, 'img', 'apacheconf-16.png')
