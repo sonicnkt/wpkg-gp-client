@@ -246,7 +246,9 @@ def check_eventlog(start_time):
             events = win32evtlog.ReadEventLog(hand, flags, 0)
             for ev_obj in events:
                 the_time = ev_obj.TimeGenerated.Format()
-                time_obj = datetime.datetime.strptime(the_time, '%m/%d/%y %H:%M:%S')
+                # '%c' is the locale date and time string format
+                time_obj = datetime.datetime.strptime(the_time, '%c')
+                #time_obj = datetime.datetime.strptime(the_time, '%m/%d/%y %H:%M:%S')
                 if time_obj < start_time:
                     #if time is old than the start time dont grab the data
                     break
