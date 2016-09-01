@@ -1,7 +1,7 @@
 import wx
 
 
-class AppImages():
+class AppImages:
     def __init__(self, path):
         self.path = path
         self.img_dict = {'update': 'gnome-fs-bookmark-16.png',

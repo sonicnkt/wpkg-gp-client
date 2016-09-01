@@ -9,7 +9,7 @@ class ConfigIni:
     def __init__(self, configfile):
         self.config = ConfigParser.ConfigParser()
         if not self.config.read(configfile):
-            error_str = "Can't open config file: {}".format(configfile)
+            error_str = "NoConfigFile Error - Can't open config file:\n{}".format(configfile)
             raise NoConfigFile(error_str)
 
     def _loadsection(self, section):
