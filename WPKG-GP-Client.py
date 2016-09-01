@@ -30,8 +30,9 @@ xml_file, arch = get_wpkg_db()
 # ---------------------------------
 try:
     ini = load_config.ConfigIni(os.path.join(path, 'wpkg-gp_client.ini'))
-except load_config.NoConfigFile:
+except load_config.NoConfigFile, error_msg:
     # Config file could not be opened!
+    print error_msg
     no_config = True
 else:
     no_config = False
@@ -50,7 +51,7 @@ else:
     update_startup = ini.loadsetting('Update Check', 'startup')
     update_interval = ini.loadsetting('Update Check', 'interval')
     if isinstance(update_interval, (int, long)):
-        # Transform Minutes to Milliseconds
+        # Transform Minutes to Milliseconds for wx.python timer
         update_interval = update_interval * 60 * 1000
     else:
         update_interval = False
@@ -512,8 +513,8 @@ if __name__ == '__main__':
     # Translation configuration
     localedir = os.path.join(path, "locale")
     mylocale = wx.Locale()
-    #mylocale = wx.Locale(wx.LANGUAGE_SPANISH)
-    # Forcing any language to wx.Locale() results in changes of the win32evtlog time format and breaking the parser!
+    # mylocale = wx.Locale(wx.LANGUAGE_SPANISH)
+    # Add config option or settings to force language?
     mylocale.AddCatalogLookupPathPrefix(localedir)
     mylocale.AddCatalog('wpkg-gp-client')
 
