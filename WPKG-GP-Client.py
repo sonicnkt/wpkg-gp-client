@@ -511,10 +511,9 @@ class ViewLogDialog(wx.Dialog):
 if __name__ == '__main__':
     app = wx.App(False)
     # Translation configuration
+    mylocale = wx.Locale(wx.LANGUAGE_ENGLISH)
+    # TODO: Add config option or settings to force language? e.g.: wx.Locale(language=wx.LANGUAGE_FRENCH)
     localedir = os.path.join(path, "locale")
-    mylocale = wx.Locale()
-    # mylocale = wx.Locale(wx.LANGUAGE_SPANISH)
-    # Add config option or settings to force language?
     mylocale.AddCatalogLookupPathPrefix(localedir)
     mylocale.AddCatalog('wpkg-gp-client')
 
@@ -531,6 +530,12 @@ if __name__ == '__main__':
         dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         exit()
+
+    # Set help file
+    lang_int = mylocale.GetLanguage()
+    lang = wx.Locale.GetLanguageCanonicalName(lang_int)
+    if not help_file or help_file.lower() == "default":
+        help_file = get_help_translation(path, lang)
 
     TRAY_TOOLTIP = 'WPKG-GP Client'
     TRAY_ICON = os.path.join(path, 'img', 'apacheconf-16.png')
