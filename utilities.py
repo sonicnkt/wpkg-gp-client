@@ -216,7 +216,7 @@ def version_compare(local, remote):
     return update_list
 
 def check_eventlog(start_time):
-    # Parse Windows EVENT LOG
+    # Parse Windows EVENT LOG Source
     # Source: http://docs.activestate.com/activepython/3.3/pywin32/Windows_NT_Eventlog.html
 
     flags = win32evtlog.EVENTLOG_BACKWARDS_READ | win32evtlog.EVENTLOG_SEQUENTIAL_READ
@@ -230,10 +230,9 @@ def check_eventlog(start_time):
                 0: 'INFORMATION'}
     computer = 'localhost'
     logtype = 'Application'
-    time = "07/05/16 11:54:34"
-        # open event log
+
+    # open event log
     hand = win32evtlog.OpenEventLog(computer, logtype)
-    #print logtype, ' events found since: ', start_time
 
     log = []
     error_log = []
@@ -258,9 +257,13 @@ def check_eventlog(start_time):
                 msg = unicode(win32evtlogutil.SafeFormatMessage(ev_obj, logtype))
 
                 if (src == 'WSH'):  # Only Append WPKG Logs (WSH - Windows Scripting Host)
-                    log.append(string.join((the_time, computer, src, evt_type, '\n' + msg), ' : '))
+                    # Skip suppressed user notification info
+                    if not msg.startswith('User notification suppressed.'):
+                        log.append(string.join((the_time, computer, src, evt_type, '\n' + msg), ' : '))
+                    # Detect possible reboot
                     if 'System reboot was initiated but overridden.' in msg:
                         reboot = True
+                    # Create additional error log if there are warnings or errors
                     if (evt_type == "ERROR") or (evt_type == "WARNING"):
                         # Only Append Errors and Warnings
                         if "msiexec" in msg:
