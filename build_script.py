@@ -1,12 +1,19 @@
 # -*- encoding: utf-8 -*-
 # WPKG-GP Client BUILD SCRIPT
 
-VERSION = "0.9.6.3" # str + max 4 number values seperated by a "."
-NAME = "WPKG-GP Client" # Application Name
+VERSION = "0.9.6.5"  # max 4 number values separated by a "."
+NAME = "WPKG-GP Client"  # Application Name
 AUTHOR = "Nils Thiele"
-INNOSETUPCMD = r'%PROGRAMFILES(X86)%\Inno Setup 5\iscc.exe' # Inno Setup with PreProcessor Support!
+INNOSETUPCMD = r'%PROGRAMFILES(X86)%\Inno Setup 5\iscc.exe'  # InnoSetup with PreProcessor Support!
 
-# DO NOT MODFIY AFTER THIS POINT IF YOU DON'T KNOW WHAT YOU ARE DOING!!!
+# DO NOT MODIFY AFTER THIS POINT IF YOU DON'T KNOW WHAT YOU ARE DOING!!!
+
+print 'WPKG-GP Client Build script'
+print '___________________________\n'
+print "Version: ", VERSION
+print "Name: ", NAME
+print "Author: ", AUTHOR
+print "ISCC path: ", INNOSETUPCMD
 
 from datetime import datetime
 import os, sys
@@ -49,21 +56,28 @@ version_txt = u'''VSVersionInfo(
 )
 '''
 
+
 def v_convert(ver_str):
-    ver = ver_str.split('.')
-    if len(ver) > 4:
-        ver = [num for f, num in enumerate(ver) if f < 4]
-        print ver
-    elif len(ver) < 4:
-        add = 4 - len(ver)
-        for _ in range(0, add):
-            ver.append('0')
-    new_ver_str = ' ,'.join(ver)
-    return new_ver_str
+    # Converts any version string to a 4 digit string seperated by ", ".
+    if len(ver_str) > 0:
+        ver = ver_str.split('.')
+        if len(ver) > 4:
+            ver = [num for f, num in enumerate(ver) if f < 4]
+        elif len(ver) < 4:
+            add = 4 - len(ver)
+            for _ in range(0, add):
+                ver.append('0')
+        new_ver_str = ' ,'.join(ver)
+        return new_ver_str
+    else:
+        print "\nError: You have to specify a correct version value!\n"
+        exit(1)
+        return
+
 
 # Create version.txt file for pyinstaller
-current_version_txt =  version_txt.format(v_convert(VERSION), NAME, AUTHOR, VERSION, BUILDID)
-with codecs.open(path+ 'version.txt', 'w', 'utf-8') as outfile:
+current_version_txt = version_txt.format(v_convert(VERSION), NAME, AUTHOR, VERSION, BUILDID)
+with codecs.open(path + 'version.txt', 'w', 'utf-8') as outfile:
     outfile.write(current_version_txt)
 
 # Changing current working directory for pyinstaller
