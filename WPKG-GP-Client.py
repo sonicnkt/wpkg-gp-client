@@ -511,7 +511,7 @@ class ViewLogDialog(wx.Dialog):
 if __name__ == '__main__':
     app = wx.App(False)
     # Translation configuration
-    mylocale = wx.Locale(wx.LANGUAGE_ENGLISH)
+    mylocale = wx.Locale(wx.LANGUAGE_DEFAULT)
     # TODO: Add config option or settings to force language? e.g.: wx.Locale(language=wx.LANGUAGE_FRENCH)
     localedir = os.path.join(path, "locale")
     mylocale.AddCatalogLookupPathPrefix(localedir)
