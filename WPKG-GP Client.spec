@@ -19,6 +19,13 @@ def addImages():
         extraDatas.append(('img\\' + file, img_path + file, ''))
     return extraDatas
 
+def addHelpFiles():
+    help_path = base_path + os.sep + "help" + os.sep
+    extraDatas = []
+    for file in os.listdir(help_path):
+        extraDatas.append(('help\\' + file, help_path + file, ''))
+    return extraDatas
+
 block_cipher = None
 
 a = Analysis(['WPKG-GP-Client.py'],
@@ -35,6 +42,7 @@ a = Analysis(['WPKG-GP-Client.py'],
 
 # Add data to dist
 a.datas += addImages()
+a.datas += addHelpFiles()
 a.datas += addTranslations()
 a.datas += [('wpkg-gp_client_example.ini', base_path + os.sep + 'wpkg-gp_client_example.ini', ''),
             ('help.html', base_path + os.sep + 'help.html', '')]
