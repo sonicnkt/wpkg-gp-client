@@ -52,3 +52,4 @@ __Translations:__
 
 <a name="license">
 ##License
+MIT LICENSE??
