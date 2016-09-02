@@ -2,7 +2,9 @@
 - [Introduction](#introduction)
 - [Update Notifications](#updates)
 - [Update System](#upgrade)
+- [Erros during update](#error)
 - [Credits](#credits)
+- [License](#license)
 
 <a name="introduction">
 ##Introduction
@@ -16,49 +18,23 @@ TEMP TEMP TEMP
 ##Update System
 TEMP TEMP TEMP
 
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-BLA BLA BLA 
-
-
+<a name="error">
+##Erros during update
 BLA BLA BLA 
 
 <a name="credits">
 ##Credits
 __WPKG-GP Client__ was developed by _Nils Thiele_.
 
-Project: wpkg-gp-client <https://github.com/sonicnkt/wpkg-gp-client/><br/>
-Copyright (c) 2016 _Nils Thiele_.<br/>
+__Source Code:__
 
-__WPKG-GP Client__ uses code of other opensource projects listed below:
+Project: wpkg-gp-client <https://github.com/sonicnkt/wpkg-gp-client/><br/>
+Copyright (c) 2016 _Nils Thiele_.
+
+Project: wpkg-gp modification <https://github.com/sonicnkt/wpkg-gp/><br/>
+Copyright (c) 2016 _Nils Thiele_.
+
+__WPKG-GP Client__ uses code of other opensource projects:
 
 - Project: python-markdown2 <https://github.com/trentm/python-markdown2/>
     - Copyright (c) 2012 _Trent Mick_.
@@ -73,3 +49,6 @@ __WPKG-GP Client__ uses code of other opensource projects listed below:
 __Translations:__
 
 - spanish by _Julio San José Antolín_
+
+<a name="license">
+##License
