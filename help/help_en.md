@@ -8,19 +8,56 @@
 
 <a name="introduction">
 ##Introduction
-TEMP TEMP TEMP
+WPKG-GP Client is a graphical user interface which allows normal users without elevated rights to manually update their
+system software. The application starts with automatically with the user logging and informs of pending updates as well as
+giving the user a graphical feedback of the installing updates.
+
+The Application is coded in Python/wxPython and relies on a [modification of WPKG-GP](https://github.com/sonicnkt/wpkg-gp/)
+and [WPKG](https://wpkg.org/)for actual installing process in the background.
 
 <a name="updates">
 ##Update Notifications
-TEMP TEMP TEMP
+The application can inform the user in a time interval of pending updates for the installed software. This has to be 
+configured by the system administrator.
+
+Only updates for already installed packages are currently supported, there will be no notifications for new packages that 
+were not installed before.
+
+Because the update database for WPKG-GP Client is independent of the actual WPKG package database on the update server, 
+it is possible that there are pending updates that the user wasn't informed about.
+
+You can also manually check for pending updates by choosing the option __Check for updates__ from the context menu of 
+the tray icon.
 
 <a name="upgrade">
 ##Update System
-TEMP TEMP TEMP
+Double-clicking the tray icon, selecting the option __System update__ or clicking on an update notification bubble opens
+up the _System Update_ dialog from which you can start a manual update of the installed software packages.
+
+__Attention:__
+You should close all applications and save all open documents, applications can close without a warning during the 
+update installations and even a full restart without further conformation is possible.
+
+Current progress of the update process is displayed using a progress bar and a text field with the current task running.
+Keep in mind that the progress bar only displays the progress of the whole update process and not the process of the
+individual installations.
+
+If the update process finishes it will be shown by a full progress bar and the information "WPKG Process Finished" in 
+the current progress text field. You can display the details of tasks performed by using the "__LOG__"  option.
+
+Some programs need a system restart to function correctly after the installation. In most cases this wont be forced and 
+the current user will only be informed to restart their system. A new system update will be blocked until the system was
+restarted.
+
+You can select the option __Shutdown after update__ before and during the update process is running. 
+
+If a reboot or shutdown was initiated this process can be canceled by selecting the option __Cancel shutdown__ from the 
+tray icons context menu. 
 
 <a name="error">
 ##Erros during update
-BLA BLA BLA 
+If an error occurs during the system update process with the installation of a package an error log will be opened 
+automatically withe the process finished. A configured shutdown won't be executed.
 
 <a name="credits">
 ##Credits

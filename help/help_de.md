@@ -9,11 +9,11 @@
 <a name="introduction">
 ##Einleitung
 WPKG-GP Client ist ein grafisches Benutzerinterface was es normalen System Benutzer (Ohne Administatoren Rechte)
-ermöglich die Software auf ihrem System manuell zu aktualisieren. Der Prozess verläuft nach dem Start vollautomatisch
+ermöglich die Software auf ihrem System manuell zu aktualisieren. Die Anwendung nach dem Start vollautomatisch
 im Hintergrund und der Benutzer wird über die Fortschritt der Aktualisierung informiert.
 
-Geschrieben ist das Programm in Python/wxPython und nutzt für die eigentlich Software Aktualisierung eine Modifikation
-von [WPKG-GP](https://github.com/cleitet/wpkg-gp/wiki)
+Geschrieben ist das Programm in Python/wxPython und nutzt für die eigentlich Software Aktualisierung eine [Modifikation 
+von WPKG-GP](https://github.com/sonicnkt/wpkg-gp/) und [WPKG](https://wpkg.org/).
 
 <a name="updates">
 ##Update Benachrichtigungen
