@@ -225,8 +225,8 @@ class TaskBarIcon(wx.TaskBarIcon):
                 self.timer.Start()
 
     def on_about(self, evt):
-        helpfile = os.path.join(path + help_file)
-        helpdlg = HelpDialog(helpfile, title=_(u'WPKG-GP Client - Help'))
+        #helpfile = os.path.join(path + help_file)
+        helpdlg = HelpDialog(help_file, title=_(u'WPKG-GP Client - Help'))
         helpdlg.Center()
         helpdlg.ShowModal()
 
