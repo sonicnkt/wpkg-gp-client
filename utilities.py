@@ -45,14 +45,13 @@ def get_wpkg_db():
     return xml_file, arch
 
 def get_help_translation(path, language):
-    # get first two characters of language
+    # get first two characters of language string
     help_lang = language[:2]
     help_folder_path = os.path.join(path, 'help')
     # generate possible helpfile path
     help_file_path = os.path.join(help_folder_path, 'help_{}.md'.format(help_lang) )
     # if help file exists return the relative path, if not return path for english helpfile
     if os.path.isfile(help_file_path):
-        os.path.relpath(help_file_path, path)
         return os.path.relpath(help_file_path, path)
     else:
         return 'help\help_en.md'
