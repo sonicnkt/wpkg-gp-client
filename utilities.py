@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 import xml.etree.cElementTree as ET
 from pkg_resources import parse_version
 from urllib2 import urlopen, URLError
@@ -88,7 +89,7 @@ def client_running():
 
 def shutdown(mode, time=60, msg=None):
     time = str(time)
-    shutdown_base_str = "shutdown.exe "
+    shutdown_base_str = u"shutdown.exe "
     if mode == 1:
         shutdown_str = shutdown_base_str + "/f /r /t {}".format(time)
     elif mode == 2:
@@ -102,11 +103,12 @@ def shutdown(mode, time=60, msg=None):
         if msg:
             if "%TIME%" in msg:
                 msg = msg.replace("%TIME%", str(time))
-            shutdown_str += ' /c "{}"'.format(str(msg))
+                print msg # DEBGUG
+            shutdown_str += u' /c "{}"'.format(unicode(msg))
     # Don't Display Console Window
     # Source: http://stackoverflow.com/questions/7006238/how-do-i-hide-the-console-when-i-use-os-system-or-subprocess-call
     CREATE_NO_WINDOW = 0x08000000
-    call(shutdown_str, creationflags=CREATE_NO_WINDOW)
+    call(shutdown_str.encode(sys.getfilesystemencoding()), creationflags=CREATE_NO_WINDOW)
 
 def SetRebootPendingTime(reset=False):
     if reset:
