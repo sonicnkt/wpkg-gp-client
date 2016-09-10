@@ -6,16 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: BUG-EMAIL-ADDR <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2016-09-02 12:46+0100\n"
-"PO-Revision-Date: 2016-09-02 12:47+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2016-09-08 17:44+0200\n"
+"PO-Revision-Date: 2016-09-09 17:38+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: plurals=2; plural=(n > 1)\n"
-"X-Generator: Eazy Po 0.9.5.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: WPKG-GP-Client.py:98
 msgid ""
@@ -23,7 +23,7 @@ msgid ""
 "during system start up."
 msgstr ""
 "Se ha detectado un error de actualización\n"
-"durante el arranque del sistema."
+"durante el inicio del sistema."
 
 #: WPKG-GP-Client.py:100
 msgid "WPKG Error"
@@ -49,11 +49,11 @@ msgstr "¡Atención!"
 
 #: WPKG-GP-Client.py:118
 msgid "Check for updates"
-msgstr "Buscando actualizaciones"
+msgstr "Buscar actualizaciones"
 
 #: WPKG-GP-Client.py:119
 msgid "System update"
-msgstr "Actualización del sistema"
+msgstr "Actualizar el  sistema"
 
 #: WPKG-GP-Client.py:121
 msgid "Help"
@@ -102,7 +102,7 @@ msgstr ""
 "¡Reinicio necesario!\n"
 "\n"
 "Es necesario reiniciar antes de que el sistema\n"
-"se  pueda actualizar otra vez.\n"
+"se  pueda actualizar de nuevo.\n"
 "¿Reiniciar ahora?"
 
 #: WPKG-GP-Client.py:199 WPKG-GP-Client.py:453
@@ -111,7 +111,7 @@ msgstr "Es necesario reiniciar"
 
 #: WPKG-GP-Client.py:203
 msgid "System will reboot now!"
-msgstr "¡El sistema se reiniciara ahora!"
+msgstr "¡El sistema se reiniciará ahora!"
 
 #: WPKG-GP-Client.py:213
 msgid "System Update"
@@ -127,8 +127,7 @@ msgid ""
 "without a warning and system could reboot without further confirmation."
 msgstr ""
 "Cierre todas las aplicaciones abiertas, es posible que los programas se "
-"cierren sin advertencia y el sistema se reinicie sin ninguna "
-"confirmación."
+"cierren y el sistema se reinicie sin previo aviso."
 
 #: WPKG-GP-Client.py:274 WPKG-GP-Client.py:362
 msgid "Attention"
@@ -156,7 +155,7 @@ msgstr "Cancelar"
 
 #: WPKG-GP-Client.py:316
 msgid "2. Warning"
-msgstr "2. Advertencia"
+msgstr "2. Aviso"
 
 #: WPKG-GP-Client.py:317
 msgid ""
@@ -168,7 +167,7 @@ msgid ""
 msgstr ""
 "¡Cierre todos los programas!\n"
 "\n"
-"¡El sistema podría reiniciarse sin mas confirmaciones!\n"
+"¡El sistema podría reiniciarse sin previo aviso!\n"
 "\n"
 "¿Continuar?"
 
@@ -185,11 +184,10 @@ msgstr ""
 "¿Cancelar?"
 
 #: WPKG-GP-Client.py:363
-#, fuzzy
-#| msgid ""
 msgid ""
 "System detected a active VPN Connection using Cisco Anyconnect\n"
-"This could result in slow upgrade progress and updates for the AnyConnect\n"
+"This could result in slow upgrade progress and updates for the "
+"AnyConnect\n"
 "Software will be blocked.\n"
 "Continue?"
 msgstr ""
@@ -259,11 +257,12 @@ msgid "No System changes."
 msgstr "No hay cambios en el sistema."
 
 #: WPKG-GP-Client.py:522
-#, fuzzy
-#| msgid "An instance of WPKG-GP Client is allready running!"
 msgid "An instance of WPKG-GP Client is already running!"
-msgstr "¡Ya se está ejecutando una instancia del cliente WPKG-GP!"
+msgstr "¡El cliente WPKG-GP ya se está ejecutando!"
 
 #: WPKG-GP-Client.py:528
 msgid "Can't open config file \"{}\"!"
-msgstr ""
+msgstr "¡No se puede abrir el fichero de configuración \"{}\"!"
+
+#~ msgid "An instance of WPKG-GP Client is allready running!"
+#~ msgstr "¡Ya se está ejecutando una instancia del cliente WPKG-GP!"
