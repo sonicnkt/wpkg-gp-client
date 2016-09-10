@@ -1,0 +1,2 @@
+0.9.6.7:
+    - fixed shutdown and reboot functionality if non ASCII characters are used in the translation.
