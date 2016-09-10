@@ -397,7 +397,6 @@ class RunWPKGDialog(wx.Dialog):
                 if out.startswith('Error') or out.startswith('Info'):
                     out_msg = out
                     self.shouldAbort = True
-                    # TODO: ADD - You are not authorized to run wpkg
 
             except win32api.error as exc:
                 if exc.winerror == winerror.ERROR_PIPE_BUSY:
