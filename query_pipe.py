@@ -41,7 +41,10 @@ def wpkggp_query(cp):
         try:
             (hr, readmsg) = ReadFile(pipeHandle, 512)
             out = readmsg[4:]  # Strip 3 digit status code
-            # print repr(out) # DEBUG!
+            if out.startswith('Unknown command'):
+                # installed wpkg-gp doesn't support the Query Command
+                error_msg = 'Error: Query function not supported in the installed wpkg-gp version.'
+            #print repr(out) # DEBUG!
             n += 1
             if n > 1:
                 #packages.append(out.decode('utf-8').split('\t'))
@@ -63,8 +66,6 @@ def wpkggp_query(cp):
 
 
 cp = get_codepage()
-print cp
-
 packages, error = wpkggp_query(cp)
 if not error:
     print repr(packages)
@@ -74,3 +75,4 @@ else:
 wpkgfile = "C:\Windows\Sysnative\wpkg.xml"
 time = datetime.datetime.fromtimestamp(os.path.getmtime(wpkgfile))
 print time
+# IT DOES NOT!!!
