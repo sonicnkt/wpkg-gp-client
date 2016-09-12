@@ -88,6 +88,7 @@ def client_running():
         return False
 
 def shutdown(mode, time=60, msg=None):
+    # TODO: Add CP Option to function
     time = str(time)
     shutdown_base_str = u"shutdown.exe "
     if mode == 1:
