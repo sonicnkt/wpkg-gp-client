@@ -49,8 +49,8 @@ def wpkggp_query(cp):
             if n > 1:
                 #packages.append(out.decode('utf-8').split('\t'))
                 out = out.decode(cp)
-                for n in ['TASK: ', 'NAME: ', 'REVISION: ']:
-                    out = out.replace(n, '')
+                for x in ['TASK: ', 'NAME: ', 'REVISION: ']:
+                    out = out.replace(x, '')
                 packages.append(out.split('\t'))
             if out.startswith('Error') or out.startswith('Info'):
                 error_msg = out
