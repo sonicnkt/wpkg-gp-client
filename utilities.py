@@ -8,6 +8,11 @@ import win32security
 import win32con
 import winerror
 import _winreg
+# Imports WPKGCOnnection:
+from win32pipe import *
+from win32file import *
+import pywintypes
+import win32api
 import re
 import string
 import traceback
@@ -26,6 +31,16 @@ def get_client_path():
     pathname = os.path.dirname(sys.argv[0])
     path = os.path.abspath(pathname) + os.sep
     return path
+
+def get_codepage():
+    try:
+        key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, R"SYSTEM\CurrentControlSet\Control\Nls\CodePage", 0, _winreg.KEY_READ | _winreg.KEY_WOW64_64KEY)
+        codepage = _winreg.QueryValueEx(key, "OEMCP")[0]
+        _winreg.CloseKey(key)
+    except WindowsError:
+        print 'Registy Error: Can\'t read codepage'
+        codepage = '1252'
+    return 'cp' + codepage
 
 def get_wpkg_db():
     # Detect if x86 or AMD64 and set correct path to wpkg.xml
@@ -175,6 +190,51 @@ def getBootUp():
     bootup_time = datetime.datetime.strptime(part_out, '%Y%m%d%H%M%S')
     return bootup_time
 
+
+def wpkggp_query(cp):
+    msg = 'Query'
+    error_msg = None
+    packages = []
+    try:
+        pipeHandle = CreateFile("\\\\.\\pipe\\WPKG", GENERIC_READ | GENERIC_WRITE, 0, None, OPEN_EXISTING, 0, None)
+    except pywintypes.error, (n, f, e):
+        # print "Error when generating pipe handle: %s" % e
+        error_msg = u"Error: WPKG-GP Service not running"
+        return error_msg
+
+    SetNamedPipeHandleState(pipeHandle, PIPE_READMODE_MESSAGE, None, None)
+    WriteFile(pipeHandle, msg)
+    n = 0
+    while 1:
+        try:
+            (hr, readmsg) = ReadFile(pipeHandle, 512)
+            out = readmsg[4:]  # Strip 3 digit status code
+            if out.startswith('Unknown command'):
+                # installed wpkg-gp doesn't support the Query Command
+                error_msg = 'Error: Query function not supported in the installed wpkg-gp version.'
+            # print repr(out) # DEBUG!
+            n += 1
+            if n > 1:
+                # packages.append(out.decode('utf-8').split('\t'))
+                out = out.decode(cp)
+                for x in ['TASK: ', 'NAME: ', 'REVISION: ']:
+                    out = out.replace(x, '')
+                packages.append(out.split('\t'))
+            if out.startswith('Error') or out.startswith('Info'):
+                error_msg = out
+
+        except win32api.error as exc:
+            if exc.winerror == winerror.ERROR_PIPE_BUSY:
+                win32api.Sleep(5000)
+                print 'Pipe Busy Error'
+                continue
+            break
+
+    if error_msg:
+        return error_msg
+    else:
+        return packages
+
 def get_local_packages(xml_path):
     def resolve_variable(child, pkg_version):
         variable = re.compile('(%.+?%)').findall(pkg_version)
@@ -225,7 +285,7 @@ def version_compare(local, remote):
     for package in local:
         try:
             if parse_version(local[package][1]) < parse_version(remote[package]):
-                update_list.append((local[package][0], remote[package]))
+                update_list.append(('update',local[package][0], remote[package]))
         except KeyError:
             continue
     return update_list

@@ -1,12 +1,6 @@
 # -*- encoding: utf-8 -*-
 import wx
 from wx.lib.delayedresult import startWorker
-# Imports WPKGCOnnection:
-from win32pipe import *
-from win32file import *
-import pywintypes
-import win32api
-#import winerror
 import load_config
 from utilities import *
 from help import HelpDialog
@@ -48,6 +42,9 @@ else:
         shutdown_timeout = 30
     help_file = ini.loadsetting('General', 'help file')
     # Update Check
+    update_method = ini.loadsetting('Update Check', 'method')
+    if update_method not in ['wpkg-gp', 'updatefile']:
+        update_method = 'wpkg-gp'
     update_startup = ini.loadsetting('Update Check', 'startup')
     update_interval = ini.loadsetting('Update Check', 'interval')
     if isinstance(update_interval, (int, long)):
@@ -79,6 +76,7 @@ class TaskBarIcon(wx.TaskBarIcon):
         self.Bind(wx.EVT_TASKBAR_LEFT_DCLICK, self.on_upgrade)
         self.Bind(wx.EVT_TASKBAR_BALLOON_CLICK, self.on_bubble)
         self.upd_error_count = 0
+        self.checking_updates = False
         self.updates_available = False
         self.shutdown_scheduled = False
         self.reboot_scheduled = False
@@ -133,18 +131,25 @@ class TaskBarIcon(wx.TaskBarIcon):
         self.on_timer(evt)
 
     def on_timer(self, evt):
+        if update_method == 'wpkg-gp':
+            self.checking_updates = True
         startWorker(self.update_check_done, self.update_check)
 
     def update_check(self):
         print 'Checking for Updates... ' + str(datetime.datetime.now()) #TODO: MOVE TO DEBUG LOGGER
-        local_packages = get_local_packages(xml_file)
-        remote_packages, e = get_remote_packages(update_url)
-        if e:
-            return str(e)
-        return version_compare(local_packages, remote_packages)
+        if update_method == 'wpkg-gp':
+            updates = wpkggp_query(cp)
+        else:
+            local_packages = get_local_packages(xml_file)
+            remote_packages, e = get_remote_packages(update_url)
+            if e:
+                return str(e)
+            updates = version_compare(local_packages, remote_packages)
+        return updates
 
     def update_check_done(self, result):
         r = result.get()
+        self.checking_updates = False
         print 'Update Check Done!' #TODO: MOVE TO DEBUG LOGGER
         if isinstance(r, basestring):
             # Error returned
@@ -160,8 +165,9 @@ class TaskBarIcon(wx.TaskBarIcon):
             # Updates Found
             self.updates_available = True
             text = ''
+            #TODO: Update the generatede string to DISPLAY if update, remove, downgrade or install
             for entry in r:
-                text = text + entry[0] + ' - ver. ' + entry[1] + '\n'
+                text = text + entry[1] + ' - ver. ' + entry[2] + '\n'
             self.ShowBalloon(title=_(u"Update(s) available:"), text=text, msec=100, flags=wx.ICON_INFORMATION)
         else:
             # No Updates Found
@@ -211,7 +217,7 @@ class TaskBarIcon(wx.TaskBarIcon):
                 SetRebootPendingTime(reset=True)
             if update_interval:
                 self.timer.Stop()
-            self.wpkg_dialog = RunWPKGDialog(title=_(u'System Update'))
+            self.wpkg_dialog = RunWPKGDialog(parent=self, title=_(u'System Update'))
             self.wpkg_dialog.ShowModal()
             if self.wpkg_dialog.shutdown_scheduled == True:
                 # Shutdown Scheduled add Cancel Option to Popup Menu
@@ -248,10 +254,11 @@ class TaskBarIcon(wx.TaskBarIcon):
             self.Destroy()
 
 class RunWPKGDialog(wx.Dialog):
-    def __init__(self, title='Temp'):
+    def __init__(self, parent=None, title='Temp'):
         """Constructor"""
         wx.Dialog.__init__(self, None, title=title)
 
+        self.parent = parent
         self.shouldAbort = False
         self.running = False
         self.wpkg_start_time = None
@@ -314,6 +321,13 @@ class RunWPKGDialog(wx.Dialog):
         self.Center()
 
     def OnStartButton(self, e):
+        if self.parent.checking_updates:
+            dlg_title = _(u"Update check in progress") #TODO: FINALIZE DIALOG TEXT
+            dlg_msg = _(u"Please wait a few seconds until the check is done.")
+            dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.OK | wx.ICON_EXCLAMATION)
+            dlg.ShowModal()
+            dlg.Destroy()
+            return
         dlg_title = _(u"2. Warning")
         dlg_msg = _(u"Close all open programs!\n\nThe System could restart without further confirmation!\n\n" \
                     u"Continue?")
@@ -435,6 +449,9 @@ class RunWPKGDialog(wx.Dialog):
                 elif message.startswith(u"Info: You are not"):
                     dlg_msg = _(u"You are not authorized to execute a wpkg update!\n"
                                 u"Contact your IT department for further information.")
+                elif message.startswith(u"Info: WPKG is al"):
+                    dlg_msg = _(u"WPKG-GP is currently running a task.\n"
+                                u"Retry later.")
                 else:
                     dlg_msg = _(u'Unknown problem occured.')
                 dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.OK | dlg_icon)
@@ -536,6 +553,9 @@ if __name__ == '__main__':
     lang = wx.Locale.GetLanguageCanonicalName(lang_int)
     if not help_file or help_file.lower() == "default":
         help_file = get_help_translation(path, lang)
+
+    # Get Codepage for decoding wpkg-gp strings
+    cp = get_codepage()
 
     TRAY_TOOLTIP = 'WPKG-GP Client'
     TRAY_ICON = os.path.join(path, 'img', 'apacheconf-16.png')

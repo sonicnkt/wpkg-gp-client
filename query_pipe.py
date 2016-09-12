@@ -62,7 +62,10 @@ def wpkggp_query(cp):
                 continue
             break
 
-    return packages, error_msg
+    if error_msg:
+        return error_msg
+    else:
+        return packages
 
 
 cp = get_codepage()
