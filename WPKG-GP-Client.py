@@ -389,6 +389,7 @@ class RunWPKGDialog(wx.Dialog):
             try:
                 (hr, readmsg) = ReadFile(pipeHandle, 512)
                 out = readmsg[4:] #Strip 3 digit status code
+                # TODO: Add .decode(cp) method!
                 self.update_box.SetValue(out)
                 percentage = getPercentage(out)
                 wx.CallAfter(self.gauge.SetValue, percentage)
