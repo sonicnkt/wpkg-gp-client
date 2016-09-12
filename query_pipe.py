@@ -10,39 +10,47 @@ import re
 import datetime
 import os
 import locale
+import win32con
+import _winreg
 
-def getActCP():
-    p = subprocess.Popen('chcp', stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    out, err = p.communicate()
-    raw_out = out.encode('string_escape')
-    cp = re.search('page: ([0-9]{1,4})', raw_out).group(1)
-    return 'cp' + cp
+def get_codepage():
+    try:
+        key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, R"SYSTEM\CurrentControlSet\Control\Nls\CodePage", 0, _winreg.KEY_READ | _winreg.KEY_WOW64_64KEY)
+        codepage = _winreg.QueryValueEx(key, "OEMCP")[0]
+        _winreg.CloseKey(key)
+    except WindowsError:
+        print 'Registy Error: Can\'t read codepage'
+        codepage = '1252'
+    return 'cp' + codepage
 
 def wpkggp_query(cp):
     msg = 'Query'
-    out_msg = None
+    error_msg = None
+    packages = []
     try:
         pipeHandle = CreateFile("\\\\.\\pipe\\WPKG", GENERIC_READ | GENERIC_WRITE, 0, None, OPEN_EXISTING, 0, None)
     except pywintypes.error, (n, f, e):
         # print "Error when generating pipe handle: %s" % e
-        out_msg = u"Error: WPKG-GP Service not running"
-        return
+        error_msg = u"Error: WPKG-GP Service not running"
+        return error_msg
 
     SetNamedPipeHandleState(pipeHandle, PIPE_READMODE_MESSAGE, None, None)
     WriteFile(pipeHandle, msg)
-    packages = []
     n = 0
-    #cp = 'cp1252'
     while 1:
         try:
             (hr, readmsg) = ReadFile(pipeHandle, 512)
             out = readmsg[4:]  # Strip 3 digit status code
-            print repr(out)
+            # print repr(out) # DEBUG!
             n += 1
             if n > 1:
-                packages.append(out[7:].decode('utf-8').split('\t'))
+                #packages.append(out.decode('utf-8').split('\t'))
+                out = out.decode(cp)
+                for n in ['TASK: ', 'NAME: ', 'REVISION: ']:
+                    out = out.replace(n, '')
+                packages.append(out.split('\t'))
             if out.startswith('Error') or out.startswith('Info'):
-                out_msg = out
+                error_msg = out
 
         except win32api.error as exc:
             if exc.winerror == winerror.ERROR_PIPE_BUSY:
@@ -51,15 +59,17 @@ def wpkggp_query(cp):
                 continue
             break
 
-    return packages, out_msg
+    return packages, error_msg
 
 
-cp = getActCP()
+cp = get_codepage()
 print cp
 
 packages, error = wpkggp_query(cp)
-print packages[0][0]
-
+if not error:
+    print repr(packages)
+else:
+    print error
 # Check if the query commands modifies the file date of wpkg.xml !
 wpkgfile = "C:\Windows\Sysnative\wpkg.xml"
 time = datetime.datetime.fromtimestamp(os.path.getmtime(wpkgfile))
