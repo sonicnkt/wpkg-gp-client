@@ -5,4 +5,11 @@
         - you can selected which method to use (wpkg-gp or updatefile) with the config file
             (updatefile method only checks for updates, but puts less stress on your server as well 
             as work even if no connection to the server is possible)
-    - 
+
+    But i may remove it soon because it seems to have many problems in other environments.
+
+    TODO STILL:
+    Update base translation.pot
+    update german translation
+    update spanish translation
+
