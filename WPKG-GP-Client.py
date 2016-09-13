@@ -162,12 +162,16 @@ class TaskBarIcon(wx.TaskBarIcon):
                 self.ShowBalloon(title=_(u'Update Error'), text=error_str, msec=100, flags=wx.ICON_ERROR)
                 self.upd_error_count = 0
         elif r:
+            action_dict = {'update': 'Update:\n',
+                           'install': 'Install:\n',
+                           'remove': 'Remove:\n',
+                           'downgrade': 'Downgrade:\n'}
             # Updates Found
             self.updates_available = True
             text = ''
-            #TODO: Update the generatede string to DISPLAY if update, remove, downgrade or install
-            for entry in r:
-                text = text + entry[1] + ' - ver. ' + entry[2] + '\n'
+            # TODO: Update the generated string to DISPLAY if update, remove, downgrade or install
+            for action, name, version in r:
+                  text = text + action_dict[action] + name + ' - ver. ' + version + '\n'
             self.ShowBalloon(title=_(u"Update(s) available:"), text=text, msec=100, flags=wx.ICON_INFORMATION)
         else:
             # No Updates Found
@@ -240,7 +244,7 @@ class TaskBarIcon(wx.TaskBarIcon):
         if self.reboot_scheduled:
             # If reboot is cancled, set rebootpendingtime to registry
             SetRebootPendingTime()
-        shutdown(3) # Cancel Shutdown
+        shutdown(cp, 3) # Cancel Shutdown
         self.reboot_scheduled = False
         self.shutdown_scheduled = False
 
@@ -257,7 +261,6 @@ class RunWPKGDialog(wx.Dialog):
     def __init__(self, parent=None, title='Temp'):
         """Constructor"""
         wx.Dialog.__init__(self, None, title=title)
-
         self.parent = parent
         self.shouldAbort = False
         self.running = False
@@ -322,8 +325,9 @@ class RunWPKGDialog(wx.Dialog):
 
     def OnStartButton(self, e):
         if self.parent.checking_updates:
-            dlg_title = _(u"Update check in progress") #TODO: FINALIZE DIALOG TEXT
-            dlg_msg = _(u"Please wait a few seconds until the check is done.")
+            dlg_title = _(u"Update check in progress!") #TODO: FINALIZE DIALOG TEXT
+            dlg_msg = _(u"WPKG-GP is currently checking for updates,\n"
+                        u"please wait a few seconds until the check is done.")
             dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.OK | wx.ICON_EXCLAMATION)
             dlg.ShowModal()
             dlg.Destroy()
@@ -402,12 +406,11 @@ class RunWPKGDialog(wx.Dialog):
         while 1:
             try:
                 (hr, readmsg) = ReadFile(pipeHandle, 512)
-                out = readmsg[4:] #Strip 3 digit status code
-                # TODO: Add .decode(cp) method!
+                out = readmsg[4:].decode(cp) #Strip 3 digit status code, decode characters
                 self.update_box.SetValue(out)
                 percentage = getPercentage(out)
                 wx.CallAfter(self.gauge.SetValue, percentage)
-                print out
+                #print out #TODO DEBUG REMOVE
 
                 if out.startswith('Error') or out.startswith('Info'):
                     out_msg = out
@@ -475,7 +478,7 @@ class RunWPKGDialog(wx.Dialog):
             dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
                 # Initiate Shutdown
-                shutdown(1, time=shutdown_timeout, msg=_(u'System will reboot in %TIME% seconds.'))
+                shutdown(cp, 1, time=shutdown_timeout, msg=_(u'System will reboot in %TIME% seconds.'))
                 self.reboot_scheduled = True
                 self.Close()
             else:
