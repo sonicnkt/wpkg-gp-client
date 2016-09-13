@@ -102,8 +102,7 @@ def client_running():
     else:
         return False
 
-def shutdown(mode, time=60, msg=None):
-    # TODO: Add CP Option to function
+def shutdown(cp, mode, time=60, msg=None):
     time = str(time)
     shutdown_base_str = u"shutdown.exe "
     if mode == 1:
@@ -124,7 +123,9 @@ def shutdown(mode, time=60, msg=None):
     # Don't Display Console Window
     # Source: http://stackoverflow.com/questions/7006238/how-do-i-hide-the-console-when-i-use-os-system-or-subprocess-call
     CREATE_NO_WINDOW = 0x08000000
-    call(shutdown_str.encode(sys.getfilesystemencoding()), creationflags=CREATE_NO_WINDOW)
+    #call(shutdown_str.encode(sys.getfilesystemencoding()), creationflags=CREATE_NO_WINDOW)
+    call(shutdown_str.encode(cp), creationflags=CREATE_NO_WINDOW)
+
 
 def SetRebootPendingTime(reset=False):
     if reset:
@@ -217,9 +218,12 @@ def wpkggp_query(cp):
             if n > 1:
                 # packages.append(out.decode('utf-8').split('\t'))
                 out = out.decode(cp)
-                for x in ['TASK: ', 'NAME: ', 'REVISION: ']:
-                    out = out.replace(x, '')
-                packages.append(out.split('\t'))
+                if out.startswith('TASK'):
+                    for x in ['TASK: ', 'NAME: ', 'REVISION: ']:
+                        out = out.replace(x, '')
+                    packages.append(out.split('\t'))
+            if out.startswith('No pending'):
+                continue
             if out.startswith('Error') or out.startswith('Info'):
                 error_msg = out
 
