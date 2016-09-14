@@ -45,7 +45,6 @@ else:
     update_method = ini.loadsetting('Update Check', 'method')
     if update_method not in ['wpkg-gp', 'updatefile'] and update_method != False:
         update_method = 'wpkg-gp'
-    print update_method
     # Update Check filter
     try:
         raw_update_filter = ini.loadsetting('Update Check', 'filter').strip().split(';')
@@ -261,7 +260,7 @@ class TaskBarIcon(wx.TaskBarIcon):
         if self.reboot_scheduled:
             # If reboot is cancled, set rebootpendingtime to registry
             SetRebootPendingTime()
-        shutdown(cp, 3) # Cancel Shutdown
+        shutdown(3) # Cancel Shutdown
         self.reboot_scheduled = False
         self.shutdown_scheduled = False
 
@@ -495,7 +494,7 @@ class RunWPKGDialog(wx.Dialog):
             dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
                 # Initiate Shutdown
-                shutdown(cp, 1, time=shutdown_timeout, msg=_(u'System will reboot in %TIME% seconds.'))
+                shutdown(1, time=shutdown_timeout, msg=_(u'System will reboot in %TIME% seconds.'))
                 self.reboot_scheduled = True
                 self.Close()
             else:
@@ -552,7 +551,7 @@ if __name__ == '__main__':
     # TODO: Add config option or settings to force language? e.g.: wx.Locale(language=wx.LANGUAGE_FRENCH)
     localedir = os.path.join(path, "locale")
     mylocale.AddCatalogLookupPathPrefix(localedir)
-    mylocale.AddCatalog('wpkg-gp-client')
+    mylocale.AddCatalog('wpkg-gp-client_test')
 
     # If config file could not be opened
     if no_config:
