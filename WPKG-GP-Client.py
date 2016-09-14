@@ -161,7 +161,7 @@ class TaskBarIcon(wx.TaskBarIcon):
             remote_packages, e = get_remote_packages(update_url)
             if e:
                 return str(e)
-            updates = version_compare(local_packages, remote_packages)
+            updates = version_compare(local_packages, remote_packages, update_blacklist)
         return updates
 
     def update_check_done(self, result):

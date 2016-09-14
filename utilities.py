@@ -290,14 +290,15 @@ def get_remote_packages(url):
         remote_packages[pkg_id] = pkg_version
     return remote_packages, e
 
-def version_compare(local, remote):
+def version_compare(local, remote, blacklist):
     # Comparing Version Numbers:
     # http://stackoverflow.com/questions/11887762/compare-version-strings
     update_list = []
     for package in local:
         try:
             if parse_version(local[package][1]) < parse_version(remote[package]):
-                update_list.append(('update',local[package][0], remote[package]))
+                if not local[package][0].lower().startswith(blacklist):
+                    update_list.append(('update',local[package][0], remote[package]))
         except KeyError:
             continue
     return update_list
