@@ -192,7 +192,7 @@ def getBootUp():
     return bootup_time
 
 
-def wpkggp_query(cp):
+def wpkggp_query(cp, filter, blacklist):
     msg = 'Query'
     error_msg = None
     packages = []
@@ -221,7 +221,12 @@ def wpkggp_query(cp):
                 if out.startswith('TASK'):
                     for x in ['TASK: ', 'NAME: ', 'REVISION: ']:
                         out = out.replace(x, '')
-                    packages.append(out.split('\t'))
+                    package = out.split('\t')
+                    # Filter Packages by task
+                    if package[0] in filter:
+                        # Filter Packages by name
+                        if not package[1].lower().startswith(blacklist):
+                            packages.append(package)
             if out.startswith('No pending'):
                 continue
             if out.startswith('Error') or out.startswith('Info'):
@@ -237,6 +242,9 @@ def wpkggp_query(cp):
     if error_msg:
         return error_msg
     else:
+        # Sort list by installs, updates, downgrades and removes
+        sort_order = {"install": 0, "update": 1, "downgrade": 2, "remove": 3}
+        packages.sort(key=lambda val: sort_order[val[0]])
         return packages
 
 def get_local_packages(xml_path):

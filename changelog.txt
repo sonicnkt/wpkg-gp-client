@@ -1,10 +1,12 @@
 0.9.7.0:
     - fixed shutdown and reboot functionality if non ASCII characters are used in the translation.
-    - implemented another updates checking function through wpkg-gp:
+    - implemented update checking function through wpkg-gp:
         - wpkg-gp (0.17.12) will query wpkg for pending updates, downgrades, installs and removes.
-        - you can selected which method to use (wpkg-gp or updatefile) with the config file
-            (updatefile method only checks for updates, but puts less stress on your server as well 
-            as work even if no connection to the server is possible)
+        - you can selecte which method to use (wpkg-gp or updatefile) with the config file
+            (updatefile method only checks for updates, but maybe puts less stress on your server as well
+            and work even if there is no connection to the server at the time)
+        - using wpkg-gp method you can filter what kind of tasks are displayed to the user (config file)
+        - using wpkg-gp method you can blacklist packages from being displayed to the user (config file)
 
     But i may remove it soon because it seems to have many problems in other environments.
 

@@ -41,10 +41,27 @@ else:
     if not isinstance(shutdown_timeout, (int, long)):
         shutdown_timeout = 30
     help_file = ini.loadsetting('General', 'help file')
-    # Update Check
+    # Update Check method
     update_method = ini.loadsetting('Update Check', 'method')
-    if update_method not in ['wpkg-gp', 'updatefile']:
+    if update_method not in ['wpkg-gp', 'updatefile'] and update_method != False:
         update_method = 'wpkg-gp'
+    print update_method
+    # Update Check filter
+    try:
+        raw_update_filter = ini.loadsetting('Update Check', 'filter').strip().split(';')
+    except AttributeError:
+        raw_update_filter = ''
+    available_filter = ('update', 'install', 'downgrade', 'remove')
+    if raw_update_filter == 'all' or raw_update_filter == '':
+        update_filter = available_filter
+    else:
+        update_filter = tuple([entry for entry in raw_update_filter if entry in available_filter])
+    # Update Check blacklist
+    try:
+        raw_update_blacklist = ini.loadsetting('Update Check', 'blacklist').lower().strip().split(';')
+    except AttributeError:
+        raw_update_blacklist = ''
+    update_blacklist = tuple(raw_update_blacklist)
     update_startup = ini.loadsetting('Update Check', 'startup')
     update_interval = ini.loadsetting('Update Check', 'interval')
     if isinstance(update_interval, (int, long)):
@@ -81,7 +98,7 @@ class TaskBarIcon(wx.TaskBarIcon):
         self.shutdown_scheduled = False
         self.reboot_scheduled = False
         self.bootup_time = getBootUp()
-        if update_interval:
+        if update_interval and update_method:
             self.timer = wx.Timer(self)
             self.Bind(wx.EVT_TIMER, self.on_timer, self.timer)
             self.timer.Start(update_interval)
@@ -113,7 +130,7 @@ class TaskBarIcon(wx.TaskBarIcon):
 
     def CreatePopupMenu(self):
         menu = wx.Menu()
-        if update_interval:
+        if update_method:
             create_menu_item(menu, _(u"Check for updates"), "update", self.manual_timer)
         create_menu_item(menu, _(u"System update"), "upgrade", self.on_upgrade)
         menu.AppendSeparator()
@@ -138,7 +155,7 @@ class TaskBarIcon(wx.TaskBarIcon):
     def update_check(self):
         print 'Checking for Updates... ' + str(datetime.datetime.now()) #TODO: MOVE TO DEBUG LOGGER
         if update_method == 'wpkg-gp':
-            updates = wpkggp_query(cp)
+            updates = wpkggp_query(cp, update_filter, update_blacklist)
         else:
             local_packages = get_local_packages(xml_file)
             remote_packages, e = get_remote_packages(update_url)
@@ -162,10 +179,10 @@ class TaskBarIcon(wx.TaskBarIcon):
                 self.ShowBalloon(title=_(u'Update Error'), text=error_str, msec=100, flags=wx.ICON_ERROR)
                 self.upd_error_count = 0
         elif r:
-            action_dict = {'update': 'Update:\n',
-                           'install': 'Install:\n',
-                           'remove': 'Remove:\n',
-                           'downgrade': 'Downgrade:\n'}
+            action_dict = {'update': 'UPD: ',
+                           'install': 'NEW: ',
+                           'remove': 'REM: ',
+                           'downgrade': 'DOW: '}
             # Updates Found
             self.updates_available = True
             text = ''
@@ -219,7 +236,7 @@ class TaskBarIcon(wx.TaskBarIcon):
                     return
             elif reboot_pending:
                 SetRebootPendingTime(reset=True)
-            if update_interval:
+            if update_method and update_interval:
                 self.timer.Stop()
             self.wpkg_dialog = RunWPKGDialog(parent=self, title=_(u'System Update'))
             self.wpkg_dialog.ShowModal()
@@ -231,12 +248,12 @@ class TaskBarIcon(wx.TaskBarIcon):
                 self.shutdown_scheduled = True
                 self.reboot_scheduled = True
             self.wpkg_dialog.Destroy()
-            if update_interval:
+            if update_method and update_interval:
                 self.timer.Start()
 
     def on_about(self, evt):
-        #helpfile = os.path.join(path + help_file)
-        helpdlg = HelpDialog(help_file, title=_(u'WPKG-GP Client - Help'))
+        helpfile = os.path.join(path + help_file)
+        helpdlg = HelpDialog(helpfile, title=_(u'WPKG-GP Client - Help'))
         helpdlg.Center()
         helpdlg.ShowModal()
 
