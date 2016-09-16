@@ -57,7 +57,7 @@ exe = EXE(pyz,
           debug=False,
           strip=None,
           upx=True,
-          console=False,
+          console=True,
           icon=myicon,
           version=myversion
           )
