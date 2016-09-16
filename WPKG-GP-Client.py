@@ -551,7 +551,7 @@ if __name__ == '__main__':
     # TODO: Add config option or settings to force language? e.g.: wx.Locale(language=wx.LANGUAGE_FRENCH)
     localedir = os.path.join(path, "locale")
     mylocale.AddCatalogLookupPathPrefix(localedir)
-    mylocale.AddCatalog('wpkg-gp-client_test')
+    mylocale.AddCatalog('wpkg-gp-client')
 
     # If config file could not be opened
     if no_config:
