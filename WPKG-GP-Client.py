@@ -20,6 +20,8 @@ img = AppImages(path)
 # set path to wpkg.xml and get system architecture
 xml_file, arch = get_wpkg_db()
 
+app_name = 'WPKG-GP Client'
+
 # Loading and setting INI settings:
 # ---------------------------------
 try:
@@ -174,20 +176,20 @@ class TaskBarIcon(wx.TaskBarIcon):
                 self.upd_error_count += 1
                 print "Update Error: {}".format(self.upd_error_count) #TODO: MOVE TO DEBUG LOGGER
             else:
-                error_str = _(u"Could not load update file:") + "\n" + r
+                error_str = _(u"Could not load updates:") + "\n" + r
                 self.ShowBalloon(title=_(u'Update Error'), text=error_str, msec=100, flags=wx.ICON_ERROR)
                 self.upd_error_count = 0
         elif r:
-            action_dict = {'update': 'UPD: ',
-                           'install': 'NEW: ',
-                           'remove': 'REM: ',
-                           'downgrade': 'DOW: '}
+            action_dict = {'update': _(u'UPD:') + '\t',
+                           'install': _(u'NEW:') + '\t',
+                           'remove': _(u'REM:') + '\t',
+                           'downgrade': _(u'DOW:') + '\t'}
             # Updates Found
             self.updates_available = True
             text = ''
             # TODO: Update the generated string to DISPLAY if update, remove, downgrade or install
             for action, name, version in r:
-                  text = text + action_dict[action] + name + ' - ver. ' + version + '\n'
+                text += action_dict[action] + name + ', v. ' + version + '\n'
             self.ShowBalloon(title=_(u"Update(s) available:"), text=text, msec=100, flags=wx.ICON_INFORMATION)
         else:
             # No Updates Found
@@ -212,9 +214,8 @@ class TaskBarIcon(wx.TaskBarIcon):
             try:
                 reboot_pending = ReadRebootPendingTime()
             except WindowsError:
-                dlg_title = _(u'Registry Error')
-                dlg_msg = _(u'No access to necessary registry key.')
-                dlg = wx.MessageDialog(None, dlg_msg, dlg_title, wx.OK | wx.ICON_ERROR)
+                dlg_msg = _(u'Registry Error\n\nNo access to necessary registry key.')
+                dlg = wx.MessageDialog(None, dlg_msg, app_name, wx.OK | wx.ICON_ERROR)
                 dlg.ShowModal()
                 dlg.Destroy()
                 return
@@ -223,13 +224,10 @@ class TaskBarIcon(wx.TaskBarIcon):
                            u"A reboot is required before the system\n"
                            u"can be updated again.\n"
                            u"Reboot now?")
-                dlg = wx.MessageDialog(None, dlg_msg, _(u"Reboot required"),
-                                       wx.YES_NO | wx.YES_DEFAULT | wx.ICON_EXCLAMATION)
+                dlg = wx.MessageDialog(None, dlg_msg, app_name, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_EXCLAMATION)
                 if dlg.ShowModal() == wx.ID_YES:
                     # Initiate Reboot
                     shutdown(1, time=5, msg=_(u"System will reboot now!"))
-                    # Reset Reboot Pending
-                    SetRebootPendingTime(reset=True)
                     return
                 else:
                     return
@@ -341,10 +339,9 @@ class RunWPKGDialog(wx.Dialog):
 
     def OnStartButton(self, e):
         if self.parent.checking_updates:
-            dlg_title = _(u"Update check in progress!") #TODO: FINALIZE DIALOG TEXT
             dlg_msg = _(u"WPKG-GP is currently checking for updates,\n"
-                        u"please wait a few seconds until the check is done.")
-            dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.OK | wx.ICON_EXCLAMATION)
+                        u"please wait a few seconds until the check is done and try again.")
+            dlg = wx.MessageDialog(self, dlg_msg, app_name, wx.OK | wx.ICON_EXCLAMATION)
             dlg.ShowModal()
             dlg.Destroy()
             return
@@ -394,12 +391,11 @@ class RunWPKGDialog(wx.Dialog):
         # Checking if System is connected through VPN
         out_msg = None
         if check_vpn and vpn_connected(arch=arch):
-            dlg_title = _(u"Attention")
-            dlg_msg = _(u"System detected a active VPN Connection using Cisco Anyconnect\n"
+            dlg_msg = _(u"WPKG-GP Client detected a active VPN Connection using Cisco Anyconnect.\n"
                         u"This could result in slow upgrade progress and updates for the AnyConnect\n"
                         u"Software will be blocked.\n"
                         u"Continue?")
-            dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_INFORMATION)
+            dlg = wx.MessageDialog(self, dlg_msg, app_name, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_INFORMATION)
             if dlg.ShowModal() == wx.ID_NO:
                 # Return Abort True
                 out_msg = 'WPKG process start canceled by user.'
@@ -487,11 +483,10 @@ class RunWPKGDialog(wx.Dialog):
             log_dlg.ShowModal()
             log_dlg.Destroy()
         if reboot and not chk_shutdown and not aborted:
-            dlg_title = _(u"Reboot required")
             dlg_msg = _(u"Reboot required!\n\n"
                         u"For the completion of the installation(s), a reboot is required.\n"
                         u"Reboot now?")
-            dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_EXCLAMATION)
+            dlg = wx.MessageDialog(self, dlg_msg, app_name, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
                 # Initiate Shutdown
                 shutdown(1, time=shutdown_timeout, msg=_(u'System will reboot in %TIME% seconds.'))
@@ -556,14 +551,14 @@ if __name__ == '__main__':
     # If config file could not be opened
     if no_config:
         dlgmsg = _(u'Can\'t open config file "{}"!').format("wpkg-gp_client.ini")
-        dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_ERROR)
+        dlg = wx.MessageDialog(None, dlgmsg, app_name, wx.OK | wx.ICON_ERROR)
         dlg.ShowModal()
         exit(1)
 
     # If an instance of WPKG-GP Client is running already in the users session
     if client_running():
         dlgmsg = _(u"An instance of WPKG-GP Client is already running!")
-        dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_INFORMATION)
+        dlg = wx.MessageDialog(None, dlgmsg, app_name, wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         exit()
 
@@ -576,8 +571,7 @@ if __name__ == '__main__':
     # Get Codepage for decoding wpkg-gp strings
     cp = get_codepage()
 
-    TRAY_TOOLTIP = 'WPKG-GP Client'
     TRAY_ICON = os.path.join(path, 'img', 'apacheconf-16.png')
-    TaskBarIcon(trayicon=TRAY_ICON, tooltip=TRAY_TOOLTIP)
+    TaskBarIcon(trayicon=TRAY_ICON, tooltip=app_name)
     app.MainLoop()
 
