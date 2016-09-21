@@ -151,6 +151,7 @@ class TaskBarIcon(wx.TaskBarIcon):
     def on_timer(self, evt):
         if update_method == 'wpkg-gp':
             self.checking_updates = True
+            #TODO Add check if wpkg is running at this moment?
         startWorker(self.update_check_done, self.update_check)
 
     def update_check(self):
