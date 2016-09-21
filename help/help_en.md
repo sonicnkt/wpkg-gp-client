@@ -20,8 +20,8 @@ and [WPKG](https://wpkg.org/)for actual installing process in the background.
 The application can inform the user in a time interval of pending updates for the installed software. This has to be 
 configured by the system administrator.
 
-Only updates for already installed packages are currently supported, there will be no notifications for new packages that 
-were not installed before.
+Depending on the method chosen by your system administrator, it is possible that only updates for currently installed 
+packages will appear as notifications and not other pending tasks like new installs or removals.
 
 Because the update database for WPKG-GP Client is independent of the actual WPKG package database on the update server, 
 it is possible that there are pending updates that the user wasn't informed about.

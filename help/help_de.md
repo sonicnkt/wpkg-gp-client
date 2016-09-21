@@ -20,13 +20,11 @@ von WPKG-GP](https://github.com/sonicnkt/wpkg-gp/) und [WPKG](https://wpkg.org/)
 Das Programm kann in einem vom System Administrator festgelegten Interval überprüfen ob Aktualisierungen für das System 
 vorliegen und den angemeldeten Benutzer über diese Benachrichtigen.
 
-Dabei wird jedoch nur neueren Versionen für bereits installierte Software-Pakete überprüft, Benachrichtigungen für
-anstehende Neuinstallationen gibt es (noch) nicht.
+Abhängig von der gewählten Methode für diese Überprüfung wird jedoch möglicherweise nur auf neuere Versionen für bereits 
+installierte Software-Pakete benachrichtig und keine anderen anstehenden Aufgaben wie Neuinstallationen oder Entfernungen.
 
-Da die Updates-Datenbank unabhängig von der realen Paket Datenbank auf dem Update-Server ist kann es unter Umständen 
-dazu kommen, dass es für bereits anstehende Updates noch keine Benachrichtigungen gibt.
-
-Über das Kontext-Menü in der Taskleiste kann über die Option __Auf Updates prüfen__ eine manuelle Suche gestartet werden.
+Über das Kontext-Menü in der Taskleiste kann über die Option __Auf Updates prüfen__ eine manuelle Überprüfung gestartet 
+werden.
 
 <a name="upgrade">
 ##System Aktualisieren
