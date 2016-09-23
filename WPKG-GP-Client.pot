@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: BUG-EMAIL-ADDR <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: yyyy-mm-dd hh:mm+0000\n"
-"PO-Revision-Date: 2016-09-21 12:19+0100\n"
+"PO-Revision-Date: 2016-09-23 10:43+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -18,91 +18,91 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "X-Generator: Eazy Po 0.9.5.3\n"
 
-#: WPKG-GP-Client.py:115
+#: WPKG-GP-Client.py:116
 msgid ""
 "Update error detected\n"
 "during system start up."
 msgstr ""
 
-#: WPKG-GP-Client.py:117
+#: WPKG-GP-Client.py:118
 msgid "WPKG Error"
 msgstr ""
 
-#: WPKG-GP-Client.py:118
+#: WPKG-GP-Client.py:119
 msgid "System start error"
 msgstr ""
 
-#: WPKG-GP-Client.py:126
+#: WPKG-GP-Client.py:127
 msgid ""
 "System should be updated!\n"
 "\n"
 "System wasn't updated in over {} days."
 msgstr ""
 
-#: WPKG-GP-Client.py:128
+#: WPKG-GP-Client.py:129
 msgid "Attention!"
 msgstr ""
 
-#: WPKG-GP-Client.py:135
+#: WPKG-GP-Client.py:136
 msgid "Check for updates"
 msgstr ""
 
-#: WPKG-GP-Client.py:136
+#: WPKG-GP-Client.py:137
 msgid "System update"
 msgstr ""
 
-#: WPKG-GP-Client.py:138
+#: WPKG-GP-Client.py:139
 msgid "Help"
 msgstr ""
 
-#: WPKG-GP-Client.py:141
+#: WPKG-GP-Client.py:142
 msgid "Cancel shutdown"
 msgstr ""
 
-#: WPKG-GP-Client.py:144 WPKG-GP-Client.py:509
+#: WPKG-GP-Client.py:145 WPKG-GP-Client.py:510
 msgid "Close"
 msgstr ""
 
-#: WPKG-GP-Client.py:179
+#: WPKG-GP-Client.py:181
 msgid "Could not load updates:"
 msgstr ""
 
-#: WPKG-GP-Client.py:180
+#: WPKG-GP-Client.py:182
 msgid "Update Error"
 msgstr ""
 
-#: WPKG-GP-Client.py:183
+#: WPKG-GP-Client.py:185
 msgid "UPD:"
 msgstr ""
 
-#: WPKG-GP-Client.py:184
+#: WPKG-GP-Client.py:186
 msgid "NEW:"
 msgstr ""
 
-#: WPKG-GP-Client.py:185
+#: WPKG-GP-Client.py:187
 msgid "REM:"
 msgstr ""
 
-#: WPKG-GP-Client.py:186
+#: WPKG-GP-Client.py:188
 msgid "DOW:"
 msgstr ""
 
-#: WPKG-GP-Client.py:193
+#: WPKG-GP-Client.py:194
 msgid "Update(s) available:"
 msgstr ""
 
-#: WPKG-GP-Client.py:198
+#: WPKG-GP-Client.py:199
 msgid "No Updates"
 msgstr ""
 
-#: WPKG-GP-Client.py:217
+#: WPKG-GP-Client.py:218
 msgid ""
 "Registry Error\n"
 "\n"
 "No access to necessary registry key."
 msgstr ""
 
-#: WPKG-GP-Client.py:223
+#: WPKG-GP-Client.py:224
 msgid ""
 "Reboot required!\n"
 "\n"
@@ -111,59 +111,59 @@ msgid ""
 "Reboot now?"
 msgstr ""
 
-#: WPKG-GP-Client.py:230
+#: WPKG-GP-Client.py:231
 msgid "System will reboot now!"
 msgstr ""
 
-#: WPKG-GP-Client.py:238
+#: WPKG-GP-Client.py:239
 msgid "System Update"
 msgstr ""
 
-#: WPKG-GP-Client.py:253
+#: WPKG-GP-Client.py:254
 msgid "WPKG-GP Client - Help"
 msgstr ""
 
-#: WPKG-GP-Client.py:296
+#: WPKG-GP-Client.py:297
 msgid ""
 "Close all open Applications, it is possible that programs will be closed "
 "without a warning and system could reboot without further confirmation."
 msgstr ""
 
-#: WPKG-GP-Client.py:299
+#: WPKG-GP-Client.py:300
 msgid "Attention"
 msgstr ""
 
-#: WPKG-GP-Client.py:306
+#: WPKG-GP-Client.py:307
 msgid "Current Progress:"
 msgstr ""
 
-#: WPKG-GP-Client.py:309
+#: WPKG-GP-Client.py:310
 msgid "Shutdown after update"
 msgstr ""
 
-#: WPKG-GP-Client.py:312
+#: WPKG-GP-Client.py:313
 msgid "Open WPKG Log"
 msgstr ""
 
-#: WPKG-GP-Client.py:314
+#: WPKG-GP-Client.py:315
 msgid "Update"
 msgstr ""
 
-#: WPKG-GP-Client.py:315 WPKG-GP-Client.py:368
+#: WPKG-GP-Client.py:316 WPKG-GP-Client.py:369
 msgid "Cancel"
 msgstr ""
 
-#: WPKG-GP-Client.py:342
+#: WPKG-GP-Client.py:343
 msgid ""
-"WPKG-GP is currently checking for updates,\n"
-"please wait a few seconds until the check is done and try again."
-msgstr ""
-
-#: WPKG-GP-Client.py:348
-msgid "2. Warning"
+"WPKG is currently running,\n"
+"please wait a few seconds and try again."
 msgstr ""
 
 #: WPKG-GP-Client.py:349
+msgid "2. Warning"
+msgstr ""
+
+#: WPKG-GP-Client.py:350
 msgid ""
 "Close all open programs!\n"
 "\n"
@@ -172,7 +172,7 @@ msgid ""
 "Continue?"
 msgstr ""
 
-#: WPKG-GP-Client.py:369
+#: WPKG-GP-Client.py:370
 msgid ""
 "System update in progress!\n"
 "\n"
@@ -180,7 +180,7 @@ msgid ""
 "Cancel?"
 msgstr ""
 
-#: WPKG-GP-Client.py:394
+#: WPKG-GP-Client.py:395
 msgid ""
 "WPKG-GP Client detected a active VPN Connection using Cisco Anyconnect.\n"
 "This could result in slow upgrade progress and updates for the AnyConnect\n"
@@ -188,45 +188,45 @@ msgid ""
 "Continue?"
 msgstr ""
 
-#: WPKG-GP-Client.py:453
+#: WPKG-GP-Client.py:454
 msgid "WPKG-GP Notification"
 msgstr ""
 
-#: WPKG-GP-Client.py:456
+#: WPKG-GP-Client.py:457
 msgid "The update server could not be reached."
 msgstr ""
 
-#: WPKG-GP-Client.py:459
+#: WPKG-GP-Client.py:460
 msgid "Can't connect to the wpkg-gp service."
 msgstr ""
 
-#: WPKG-GP-Client.py:462
+#: WPKG-GP-Client.py:463
 msgid ""
 "The system was rejected from the server to execute an update!\n"
 "Contact your IT department for further information."
 msgstr ""
 
-#: WPKG-GP-Client.py:465
+#: WPKG-GP-Client.py:466
 msgid ""
 "You are not authorized to execute a wpkg update!\n"
 "Contact your IT department for further information."
 msgstr ""
 
-#: WPKG-GP-Client.py:468
+#: WPKG-GP-Client.py:469
 msgid ""
 "WPKG-GP is currently running a task.\n"
 "Retry later."
 msgstr ""
 
-#: WPKG-GP-Client.py:471
+#: WPKG-GP-Client.py:472
 msgid "Unknown problem occured."
 msgstr ""
 
-#: WPKG-GP-Client.py:482
+#: WPKG-GP-Client.py:483
 msgid "Error detected during update"
 msgstr ""
 
-#: WPKG-GP-Client.py:486
+#: WPKG-GP-Client.py:487
 msgid ""
 "Reboot required!\n"
 "\n"
@@ -234,22 +234,26 @@ msgid ""
 "Reboot now?"
 msgstr ""
 
-#: WPKG-GP-Client.py:492
+#: WPKG-GP-Client.py:493
 msgid "System will reboot in %TIME% seconds."
 msgstr ""
 
-#: WPKG-GP-Client.py:500
+#: WPKG-GP-Client.py:501
 msgid "System will shutdown in %TIME% seconds."
 msgstr ""
 
-#: WPKG-GP-Client.py:507
+#: WPKG-GP-Client.py:508
 msgid "No System changes."
 msgstr ""
 
-#: WPKG-GP-Client.py:553
+#: WPKG-GP-Client.py:554
 msgid "Can't open config file \"{}\"!"
 msgstr ""
 
-#: WPKG-GP-Client.py:560
+#: WPKG-GP-Client.py:561
 msgid "An instance of WPKG-GP Client is already running!"
+msgstr ""
+
+#: WPKG-GP-Client.py:567
+msgid "WPKG-GP Client requires at least version {} of the WPKG-GP Service."
 msgstr ""

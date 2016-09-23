@@ -18,8 +18,9 @@ path = get_client_path()
 img = AppImages(path)
 
 # set path to wpkg.xml and get system architecture
-xml_file, arch = get_wpkg_db()
+xml_file, arch = arch_check()
 
+req_wpkggp_ver = '0.17.13'
 app_name = 'WPKG-GP Client'
 
 # Loading and setting INI settings:
@@ -150,8 +151,8 @@ class TaskBarIcon(wx.TaskBarIcon):
 
     def on_timer(self, evt):
         if update_method == 'wpkg-gp':
-            self.checking_updates = True
-            #TODO Add check if wpkg is running at this moment?
+            if wpkg_running():
+                return
         startWorker(self.update_check_done, self.update_check)
 
     def update_check(self):
@@ -188,7 +189,6 @@ class TaskBarIcon(wx.TaskBarIcon):
             # Updates Found
             self.updates_available = True
             text = ''
-            # TODO: Update the generated string to DISPLAY if update, remove, downgrade or install
             for action, name, version in r:
                 text += action_dict[action] + name + ', v. ' + version + '\n'
             self.ShowBalloon(title=_(u"Update(s) available:"), text=text, msec=100, flags=wx.ICON_INFORMATION)
@@ -339,9 +339,9 @@ class RunWPKGDialog(wx.Dialog):
         self.Center()
 
     def OnStartButton(self, e):
-        if self.parent.checking_updates:
-            dlg_msg = _(u"WPKG-GP is currently checking for updates,\n"
-                        u"please wait a few seconds until the check is done and try again.")
+        if wpkg_running():
+            dlg_msg = _(u"WPKG is currently running,\n"
+                        u"please wait a few seconds and try again.")
             dlg = wx.MessageDialog(self, dlg_msg, app_name, wx.OK | wx.ICON_EXCLAMATION)
             dlg.ShowModal()
             dlg.Destroy()
@@ -560,6 +560,13 @@ if __name__ == '__main__':
     if client_running():
         dlgmsg = _(u"An instance of WPKG-GP Client is already running!")
         dlg = wx.MessageDialog(None, dlgmsg, app_name, wx.OK | wx.ICON_INFORMATION)
+        dlg.ShowModal()
+        exit()
+
+    if not wpkggp_version(req_wpkggp_ver):
+        dlgmsg = _(u"WPKG-GP Client requires at least version"
+                   u" {} of the WPKG-GP Service.").format(req_wpkggp_ver)
+        dlg = wx.MessageDialog(None, dlgmsg, app_name, wx.OK | wx.ICON_ERROR)
         dlg.ShowModal()
         exit()
 
