@@ -5,6 +5,13 @@
     - updated english and german help files
     - updated german and spanish translation
 
+This release requires WPKG-GP [v0.17.13](https://github.com/sonicnkt/wpkg-gp/releases/tag/v0.17.13)
+
+Two uploads for this release, one with the debug console enabled and one without. If you encounter any problems try the
+debug version and post a new issue with the gathered information.
+
+As always check the wiki for installation and configuration [guide](https://github.com/sonicnkt/wpkg-gp-client/wiki/Installation-and-Usage).
+
 
 
     TODO: Update spanish translation.
