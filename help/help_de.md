@@ -1,6 +1,6 @@
 ##Inhalt
 - [Einleitung](#introduction)
-- [Updates Benachrichtigungen](#updates)
+- [Update Benachrichtigungen](#updates)
 - [System Aktualisieren](#upgrade)
 - [Fehler bei der Aktualisierung](#error)
 - [Credits](#credits)
@@ -22,23 +22,35 @@ vorliegen und den angemeldeten Benutzer über diese Benachrichtigen.
 
 Abhängig von der gewählten Methode für diese Überprüfung wird jedoch möglicherweise nur auf neuere Versionen für bereits 
 installierte Software-Pakete benachrichtig und keine anderen anstehenden Aufgaben wie Neuinstallationen oder Entfernungen.
+Ein 3 stelliger Indikator zeigt ihnen an welchen Aufgaben durchgeführt werden bei der Aktualisierung.
 
 Über das Kontext-Menü in der Taskleiste kann über die Option __Auf Updates prüfen__ eine manuelle Überprüfung gestartet 
 werden.
 
+![Update Benachrichtigung](help\help_de_01.jpg)
+
+|Indikator|Bedeutung|
+|---------|:---------|
+|NEW      |Ein neues Paket wird installiert|
+|UPD      |Installiertes Paket wird aktualisiert|
+|DOW      |Installiertes Paket wird zu einer älteren Version herabgesetzt|
+|REM      |Installiertes Paket wird entfernt|
+
 <a name="upgrade">
 ##System Aktualisieren
-Per Doppelklick auf das Taskbar-Icon, die Option __Update System__ im Kontext-Menü oder der Klick auf eine Update
+Per Doppelklick auf das Taskbar-Icon, die Option __System aktualiseren__ im Kontext-Menü oder der Klick auf eine Update
 Benachrichtigung wird das Aktualisierungs Fenster geöffnet. Von hier aus kann eine manuelle System Aktualisierung
 gestartet werden.
+
+![System Aktualisierung](help\help_de_02.jpg)
 
 __Achtung:__
 Alle Anwendungen sollten sicherheitshalber geschlossen werden und offene Dokumente gespeichert, da Programme ohne Vorwarnung 
 während einer Aktualisierung geschlossen werden können. In Ausnahmefällen kann es sogar vorkommen, dass das komplette 
 System ohne Benachrichtigung neustartet.
 
-Der Aktuelle Fortschritt der Aktualisierung wird über einen Fortschrittsbalken und einem Textfeld (Aktueller Fortschritt)dargestellt, dieses stellt 
-aber nur den Fortschritt des kompletten Aktualisierungs Vorgangs da und <u>NICHT</u> den Fortschritt der Installation der individuellen Software.
+Der Aktuelle Fortschritt der Aktualisierung wird über einen Fortschrittsbalken und einem Textfeld (Aktueller Fortschritt) dargestellt, dieses stellt 
+aber nur den Fortschritt des kompletten Aktualisierungs Vorgangs da und __NICHT__ den Fortschritt der Installation der individuellen Software.
 
 Der Prozess ist abgeschlossen wenn der Fortschrittsbalken komplett ist und unter _Aktueller Fortschritt_ "WPKG Process Finished" erscheint.
 Über die Option "__LOG__" können Sie sich die durchgeführte Arbeiten im Detail aufführen lassen. 
@@ -46,6 +58,8 @@ Der Prozess ist abgeschlossen wenn der Fortschrittsbalken komplett ist und unter
 Einige Programme benötigen nach der Aktualisierung einen Neustart des Systems um korrekt funktionieren zu können, dieser 
 wird nicht automatisch durchgeführt, der Benutzer wird jedoch dazu aufgefordert. Eine erneute Aktualisierung wird zudem 
 blockiert.
+
+![Neustart Erforderlich](help\help_de_03.jpg)
 
 Vor und auch während einer Aktualisierung können Sie die Option __Nach Aktualisierung Herunterfahren__ aktivieren oder 
 deaktivieren.

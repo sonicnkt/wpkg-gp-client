@@ -21,7 +21,8 @@ The application can inform the user in a time interval of pending updates for th
 configured by the system administrator.
 
 Depending on the method chosen by your system administrator, it is possible that only updates for currently installed 
-packages will appear as notifications and not other pending tasks like new installs or removals.
+packages will appear as notifications and not other pending tasks like new installs or removals. A 3 letter indicator
+displays exactly what kind of task is pending to the user.
 
 Because the update database for WPKG-GP Client is independent of the actual WPKG package database on the update server, 
 it is possible that there are pending updates that the user wasn't informed about.
@@ -29,10 +30,21 @@ it is possible that there are pending updates that the user wasn't informed abou
 You can also manually check for pending updates by choosing the option __Check for updates__ from the context menu of 
 the tray icon.
 
+![Update Benachrichtigung](help\help_de_01.jpg)
+
+|Indicator|Description|
+|---------|:---------|
+|NEW      |New software package will be installed|
+|UPD      |Installed package will be updated|
+|DOW      |Installed package will be downgraded|
+|REM      |Installed package will be removed|
+
 <a name="upgrade">
 ##Update System
 Double-clicking the tray icon, selecting the option __System update__ or clicking on an update notification bubble opens
 up the _System Update_ dialog from which you can start a manual update of the installed software packages.
+
+![System Update](help\help_en_02.jpg)
 
 __Attention:__
 You should close all applications and save all open documents, applications can close without a warning during the 
@@ -48,6 +60,8 @@ the current progress text field. You can display the details of tasks performed 
 Some programs need a system restart to function correctly after the installation. In most cases this wont be forced and 
 the current user will only be informed to restart their system. A new system update will be blocked until the system was
 restarted.
+
+![Restart necessary](help\help_de_03.jpg)
 
 You can select the option __Shutdown after update__ before and during the update process is running. 
 
