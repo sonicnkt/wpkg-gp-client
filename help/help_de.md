@@ -22,7 +22,7 @@ vorliegen und den angemeldeten Benutzer über diese Benachrichtigen.
 
 Abhängig von der gewählten Methode für diese Überprüfung wird jedoch möglicherweise nur auf neuere Versionen für bereits 
 installierte Software-Pakete benachrichtig und keine anderen anstehenden Aufgaben wie Neuinstallationen oder Entfernungen.
-Ein 3 stelliger Indikator zeigt ihnen an welchen Aufgaben durchgeführt werden bei der Aktualisierung.
+Ein Indikator zeigt ihnen an welche Aufgaben durchgeführt werden bei der Aktualisierung.
 
 Über das Kontext-Menü in der Taskleiste kann über die Option __Auf Updates prüfen__ eine manuelle Überprüfung gestartet 
 werden.
@@ -31,10 +31,10 @@ werden.
 
 |Indikator|Bedeutung|
 |---------|:---------|
-|NEW      |Ein neues Paket wird installiert|
+|NEU      |Neues Paket wird installiert|
 |UPD      |Installiertes Paket wird aktualisiert|
 |DOW      |Installiertes Paket wird zu einer älteren Version herabgesetzt|
-|REM      |Installiertes Paket wird entfernt|
+|ENTF     |Installiertes Paket wird entfernt|
 
 <a name="upgrade">
 ##System Aktualisieren
