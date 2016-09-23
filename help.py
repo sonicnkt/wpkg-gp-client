@@ -11,7 +11,7 @@ class HelpDialog(wx.Dialog):
 
         self.help = helpFile
         self.InitUI()
-        self.SetSize((600, 600))
+        self.SetSize((700, 600))
 
     def InitUI(self):
         self.panel = wx.Panel(self, wx.ID_ANY)
