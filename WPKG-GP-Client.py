@@ -23,6 +23,9 @@ xml_file, arch = arch_check()
 req_wpkggp_ver = '0.17.13'
 app_name = 'WPKG-GP Client'
 
+#Change working directory to get relative paths working for the images in the help files:
+os.chdir(path)
+
 # Loading and setting INI settings:
 # ---------------------------------
 try:
