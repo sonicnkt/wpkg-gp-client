@@ -1,17 +1,10 @@
-0.9.7.0:
-    - fixed shutdown and reboot functionality if non ASCII characters are used in the translation.
-    - implemented update checking function through wpkg-gp:
-        - wpkg-gp (0.17.12) will query wpkg for pending updates, downgrades, installs and removes.
-        - you can select which method to use (wpkg-gp or updatefile) with the config file
-            (updatefile method only checks for updates, but maybe puts less stress on your server as well
-            as work even if there is no connection to the server at the time)
-        - using wpkg-gp method you can filter what kind of tasks/actions are displayed to the user (config file)
-        - using wpkg-gp or updatefile method you can blacklist packages from being displayed to the user (config file)
+0.9.6.10:
+    - added wpkg runningstate registry check before executing a wpkg-gp command (requires 0.17.13 of my wpkg-gp mod)
+      this should prevent simultanusily execution of wpkg-gp in a multiuser environment.
+    - added WPKG-GP Version check, the application won't launch if the required WPKG-GP Version is not installed
+    - updated english and german help files
+    - updated german and spanish translation
 
-    But i may remove it soon because it seems to have many problems in other environments.
 
-    TODO STILL:
-    Update base translation.pot
-    update german translation
-    update spanish translation
 
+    TODO: Update spanish translation.
