@@ -32,7 +32,7 @@ Compression=lzma
 SolidCompression=yes
 PrivilegesRequired=admin
 CloseApplications=no
-
+UninstallDisplayIcon={app}\WPKG-GP-Client.exe
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
