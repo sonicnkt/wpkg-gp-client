@@ -42,7 +42,34 @@ def get_codepage():
         codepage = '1252'
     return 'cp' + codepage
 
-def get_wpkg_db():
+def wpkg_running():
+    running = None
+    try:
+        key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, R"SOFTWARE\WPKG", 0, _winreg.KEY_READ | _winreg.KEY_WOW64_64KEY)
+        running = _winreg.QueryValueEx(key, "running")[0]
+        _winreg.CloseKey(key)
+    except WindowsError:
+        pass
+    if running == 'true':
+        return True
+    else:
+        return False
+
+def wpkggp_version(version):
+    req_version = version
+    try:
+        key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, R"SOFTWARE\Wpkg-Gp", 0, _winreg.KEY_READ | _winreg.KEY_WOW64_64KEY)
+        inst_version = _winreg.QueryValueEx(key, "DisplayVersion")[0]
+        _winreg.CloseKey(key)
+    except WindowsError:
+        inst_version = None
+    if parse_version(req_version) <= parse_version(inst_version):
+        return True
+    else:
+        return False
+
+
+def arch_check():
     # Detect if x86 or AMD64 and set correct path to wpkg.xml
     # The Environment Variable PROCESSOR_ARCHITEW6432 only exists on 64bit Windows
     if os.environ.get("PROCESSOR_ARCHITEW6432"):
