@@ -20,7 +20,7 @@ img = AppImages(path)
 # set path to wpkg.xml and get system architecture
 xml_file, arch = arch_check()
 
-req_wpkggp_ver = '0.17.13'
+req_wpkggp_ver = '0.17.14'
 app_name = 'WPKG-GP Client'
 
 #Change working directory to get relative paths working for the images in the help files:
@@ -376,8 +376,7 @@ class RunWPKGDialog(wx.Dialog):
         if dlg.ShowModal() == wx.ID_YES:
             dlg.Destroy()
             if not self.running:
-                print 'WPKG Process finished, no abort possible' #TODO: MOVE TO DEBUG LOGGER
-                # TODO: Registry check instead?
+                # WPKG Process by this client has finished, no cancel possible
                 return
             print 'Aborting WPKG Process' #TODO: MOVE TO DEBUG LOGGER
             self.shouldAbort = True
@@ -393,10 +392,10 @@ class RunWPKGDialog(wx.Dialog):
 
 
     def LongTask(self):
-        # Checking if System is connected through VPN
         return_msg = None
         return_code = None
         reboot = False
+        # Checking if System is connected through VPN
         if check_vpn and vpn_connected(arch=arch):
             dlg_msg = _(u"WPKG-GP Client detected a active VPN Connection using Cisco Anyconnect.\n"
                         u"This could result in slow upgrade progress and updates for the AnyConnect\n"
@@ -405,9 +404,8 @@ class RunWPKGDialog(wx.Dialog):
             dlg = wx.MessageDialog(self, dlg_msg, app_name, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_INFORMATION)
             if dlg.ShowModal() == wx.ID_NO:
                 # Canceled by user because of active VPN Connection
-                #out_msg = 'WPKG process start canceled by user.'
-                # Write to textfield? self.update_box.SetValue(out)
-                return 402, None, None
+                return_msg = 'WPKG process start canceled by user.' # Make translate able?
+                return 400, return_msg, None
         # LONG TASK is the PipeConnection to the WPKG-GP Windows Service
         self.running = True
         msg = 'ExecuteNoReboot'
@@ -416,9 +414,8 @@ class RunWPKGDialog(wx.Dialog):
         except pywintypes.error, (n, f, e):
             #print "Error when generating pipe handle: %s" % e
             # Can't connect to pipe error, probably service not running
-            #out_msg = u"Error: WPKG-GP Service not running"
-            # Write to textfield? self.update_box.SetValue(out)
-            return 401, None, None
+            return_msg = u"Error: WPKG-GP Service not running"
+            return 208, return_msg, None
 
         SetNamedPipeHandleState(pipeHandle, PIPE_READMODE_MESSAGE, None, None)
         WriteFile(pipeHandle, msg)
@@ -427,23 +424,18 @@ class RunWPKGDialog(wx.Dialog):
                 (hr, readmsg) = ReadFile(pipeHandle, 512)
                 out = readmsg[4:].decode(cp) #Strip 3 digit status code, decode characters
                 status_code = int(readmsg[:3])
-                self.update_box.SetValue(out)
-                percentage = getPercentage(out)
-                wx.CallAfter(self.gauge.SetValue, percentage)
-
-                print status_code
-                print out
-
-                if status_code > 104:
-                    # No standard output
+                if status_code < 102:
+                    # default status code for pipe updates
+                    self.update_box.SetValue(out)
+                    percentage = getPercentage(out)
+                    wx.CallAfter(self.gauge.SetValue, percentage)
+                elif status_code > 300:
+                    # reboot necessary
+                    reboot = True
+                elif status_code > 200:
+                    # possible error
                     return_code = status_code
-                    if status_code == 200: # Needed??
-                        # ERROR CODE
-                        return_msg = out
-                    if status_code > 300:
-                        # Reboot necessary
-                        reboot = True
-
+                    return_msg = out
             except win32api.error as exc:
                 if exc.winerror == winerror.ERROR_PIPE_BUSY:
                     win32api.Sleep(5000)
@@ -458,62 +450,64 @@ class RunWPKGDialog(wx.Dialog):
         self.chk_shutdown.Disable()
         chk_shutdown = self.chk_shutdown.IsChecked()
         self.gauge.SetValue(100)
-        aborted, message = result.get()
-        # TODO: Remove reboot detection from WPKG LOG PARSER
-        self.log, error_log, reboot = check_eventlog(self.wpkg_start_time)
-        # IF ABBORTED?
-        if aborted: # or message:
-            # PROCESS ABORTED OR PROBLEMS
-            self.chk_shutdown.SetValue(False)
-            if message:
-                self.update_box.SetValue(message)
-                dlg_title = _(u"WPKG-GP Notification")
-                dlg_icon = wx.ICON_INFORMATION
-                if message.startswith("Error: Con"):
-                    dlg_msg = _(u"The update server could not be reached.")
-                    dlg_icon = wx.ICON_ERROR
-                elif message.startswith("Error: WP"):
-                    dlg_msg = _(u"Can't connect to the wpkg-gp service.")
-                    dlg_icon = wx.ICON_ERROR
-                elif message.startswith("Info: Cli"):
-                    dlg_msg = _(u"The system was rejected from the server to execute an update!\n"
-                                u"Contact your IT department for further information.")
-                elif message.startswith(u"Info: You are not"):
-                    dlg_msg = _(u"You are not authorized to execute a wpkg update!\n"
-                                u"Contact your IT department for further information.")
-                elif message.startswith(u"Info: WPKG is al"):
-                    dlg_msg = _(u"WPKG-GP is currently running a task.\n"
-                                u"Retry later.")
-                else:
-                    dlg_msg = _(u'Unknown problem occured.')
-                dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.OK | dlg_icon)
-                dlg.ShowModal()
+        return_code, return_msg, reboot = result.get()
+        # Get WPKG Log
+        self.log, error_log = check_eventlog(self.wpkg_start_time)
+        if self.shouldAbort:
+            self.update_box.SetValue('WPKG process aborted.')
+            if return_code == 200:
+                # display the error msg ?
+                print return_msg
+        elif return_code == 400 or return_code == 105:
+            self.update_box.SetValue(return_msg)
+        elif return_code and return_code != 200:
+            self.update_box.SetValue(return_msg)
+            dlg_title = _(u"WPKG-GP Notification")
+            dlg_icon = wx.ICON_INFORMATION
+            if return_code == 201:
+                dlg_msg = _(u"WPKG-GP is currently running a task.\n"
+                            u"Retry later.")
+            elif return_code == 204:
+                dlg_msg = _(u"The update server could not be reached.")
+                dlg_icon = wx.ICON_ERROR
+            elif return_code == 205:
+                dlg_msg = _(u"The system was rejected from the server to execute an update!\n"
+                            u"Contact your IT department for further information.")
+            elif return_code == 207:
+                dlg_msg = _(u"You are not authorized to execute a wpkg update!\n"
+                            u"Contact your IT department for further information.")
+            elif return_code == 208:
+                dlg_msg = _(u"Can't connect to the wpkg-gp service.")
+                dlg_icon = wx.ICON_ERROR
             else:
-                self.update_box.SetValue('WPKG Process Aborted.')
+                dlg_msg = _(u'Unknown problem occured.') + '\n Status code: ' + str(return_code) + '\n' + return_msg
+            dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.OK | dlg_icon)
+            dlg.ShowModal()
         else:
             if reboot:
-                self.update_box.SetValue('WPKG process Finished, restart Necessary!')
+                self.update_box.SetValue('WPKG process finished, restart necessary!')
             else:
                 self.update_box.SetValue('WPKG process finished.')
         if error_log:
             log_dlg = ViewLogDialog(title=_(u"Error detected during update"), log=error_log)
             log_dlg.ShowModal()
             log_dlg.Destroy()
-        if reboot and not chk_shutdown and not aborted:
+        if reboot and not chk_shutdown and not self.shouldAbort:
+            # reboot pending, no abort and no shutdown configured
             dlg_msg = _(u"Reboot required!\n\n"
                         u"For the completion of the installation(s), a reboot is required.\n"
                         u"Reboot now?")
             dlg = wx.MessageDialog(self, dlg_msg, app_name, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
-                # Initiate Shutdown
+                # Initiate reboot
                 shutdown(1, time=shutdown_timeout, msg=_(u'System will reboot in %TIME% seconds.'))
                 self.reboot_scheduled = True
                 self.Close()
             else:
                 # Reboot is Pending
                 SetRebootPendingTime()
-        elif reboot or chk_shutdown and not aborted:
-            # TODO: DEBUG DIALOG INFO
+        elif chk_shutdown and not self.shouldAbort and not return_code:
+            # shutdown configured, wpkg process not canceled and no error occurred
             shutdown(2, time=shutdown_timeout, msg=_(u'System will shutdown in %TIME% seconds.'))
             if reboot:
                 self.reboot_scheduled = True
