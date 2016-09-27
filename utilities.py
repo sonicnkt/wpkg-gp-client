@@ -239,19 +239,18 @@ def wpkggp_query(cp, filter, blacklist):
     while 1:
         try:
             (hr, readmsg) = ReadFile(pipeHandle, 512)
-            out = readmsg[4:]  # Strip 3 digit status code
+            out = readmsg[4:].decode(cp)  # Strip 3 digit status code and decode
             status_code = int(readmsg[:3])
             if status_code == 103:
-                out = out.decode(cp)
-                if out.startswith('TASK'):
-                    for x in ['TASK: ', 'NAME: ', 'REVISION: ']:
-                        out = out.replace(x, '')
+                # query output
+                for x in ['TASK: ', 'NAME: ', 'REVISION: ']:
+                    out = out.replace(x, '')
                     package = out.split('\t')
-                    # Filter Packages by task
-                    if package[0] in filter:
-                        # Filter Packages by name
-                        if not package[1].lower().startswith(blacklist):
-                            packages.append(package)
+                # Filter Packages by task
+                if package[0] in filter:
+                    # Filter Packages by name
+                    if not package[1].lower().startswith(blacklist):
+                        packages.append(package)
             elif status_code == 104:
                 # No pending updates
                 continue
