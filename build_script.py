@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 # WPKG-GP Client BUILD SCRIPT
 
-VERSION = "0.9.6.10"  # max 4 number values separated by a "."
+VERSION = "0.9.7"  # max 4 number values separated by a "."
 NAME = "WPKG-GP Client"  # Application Name
 AUTHOR = "Nils Thiele"
 INNOSETUPCMD = r'%PROGRAMFILES(X86)%\Inno Setup 5\iscc.exe'  # InnoSetup with PreProcessor Support!
