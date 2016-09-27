@@ -377,6 +377,7 @@ class RunWPKGDialog(wx.Dialog):
             dlg.Destroy()
             if not self.running:
                 print 'WPKG Process finished, no abort possible' #TODO: MOVE TO DEBUG LOGGER
+                # TODO: Registry check instead?
                 return
             print 'Aborting WPKG Process' #TODO: MOVE TO DEBUG LOGGER
             self.shouldAbort = True
@@ -393,7 +394,9 @@ class RunWPKGDialog(wx.Dialog):
 
     def LongTask(self):
         # Checking if System is connected through VPN
-        out_msg = None
+        return_msg = None
+        return_code = None
+        reboot = False
         if check_vpn and vpn_connected(arch=arch):
             dlg_msg = _(u"WPKG-GP Client detected a active VPN Connection using Cisco Anyconnect.\n"
                         u"This could result in slow upgrade progress and updates for the AnyConnect\n"
@@ -401,21 +404,21 @@ class RunWPKGDialog(wx.Dialog):
                         u"Continue?")
             dlg = wx.MessageDialog(self, dlg_msg, app_name, wx.YES_NO | wx.YES_DEFAULT | wx.ICON_INFORMATION)
             if dlg.ShowModal() == wx.ID_NO:
-                # Return Abort True
-                out_msg = 'WPKG process start canceled by user.'
-                self.update_box.SetValue(out_msg)
-                return True, None
+                # Canceled by user because of active VPN Connection
+                #out_msg = 'WPKG process start canceled by user.'
+                # Write to textfield? self.update_box.SetValue(out)
+                return 402, None, None
         # LONG TASK is the PipeConnection to the WPKG-GP Windows Service
         self.running = True
-        #msg = 'Execute'
         msg = 'ExecuteNoReboot'
-        #msg = "DUMDI"
         try:
             pipeHandle = CreateFile("\\\\.\\pipe\\WPKG", GENERIC_READ|GENERIC_WRITE, 0, None, OPEN_EXISTING, 0, None)
         except pywintypes.error, (n, f, e):
             #print "Error when generating pipe handle: %s" % e
-            out_msg = u"Error: WPKG-GP Service not running"
-            return True, out_msg
+            # Can't connect to pipe error, probably service not running
+            #out_msg = u"Error: WPKG-GP Service not running"
+            # Write to textfield? self.update_box.SetValue(out)
+            return 401, None, None
 
         SetNamedPipeHandleState(pipeHandle, PIPE_READMODE_MESSAGE, None, None)
         WriteFile(pipeHandle, msg)
@@ -423,14 +426,23 @@ class RunWPKGDialog(wx.Dialog):
             try:
                 (hr, readmsg) = ReadFile(pipeHandle, 512)
                 out = readmsg[4:].decode(cp) #Strip 3 digit status code, decode characters
+                status_code = int(readmsg[:3])
                 self.update_box.SetValue(out)
                 percentage = getPercentage(out)
                 wx.CallAfter(self.gauge.SetValue, percentage)
-                #print out #TODO DEBUG REMOVE
 
-                if out.startswith('Error') or out.startswith('Info'):
-                    out_msg = out
-                    self.shouldAbort = True
+                print status_code
+                print out
+
+                if status_code > 104:
+                    # No standard output
+                    return_code = status_code
+                    if status_code == 200: # Needed??
+                        # ERROR CODE
+                        return_msg = out
+                    if status_code > 300:
+                        # Reboot necessary
+                        reboot = True
 
             except win32api.error as exc:
                 if exc.winerror == winerror.ERROR_PIPE_BUSY:
@@ -439,7 +451,7 @@ class RunWPKGDialog(wx.Dialog):
                     continue
                 break
 
-        return self.shouldAbort, out_msg
+        return return_code, return_msg, reboot
 
     def LongTaskDone(self, result):
         self.running = False
@@ -447,8 +459,9 @@ class RunWPKGDialog(wx.Dialog):
         chk_shutdown = self.chk_shutdown.IsChecked()
         self.gauge.SetValue(100)
         aborted, message = result.get()
-        # TODO: Change Reboot Detection?
+        # TODO: Remove reboot detection from WPKG LOG PARSER
         self.log, error_log, reboot = check_eventlog(self.wpkg_start_time)
+        # IF ABBORTED?
         if aborted: # or message:
             # PROCESS ABORTED OR PROBLEMS
             self.chk_shutdown.SetValue(False)

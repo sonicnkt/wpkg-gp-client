@@ -1,17 +1,20 @@
-0.9.6.10:
-    - added wpkg runningstate registry check before executing a wpkg-gp command (requires 0.17.13 of my wpkg-gp mod)
-      this should prevent simultanusily execution of wpkg-gp in a multiuser environment.
-    - added WPKG-GP Version check, the application won't launch if the required WPKG-GP Version is not installed
-    - updated english and german help files
-    - updated german and spanish translation
-
-This release requires WPKG-GP [v0.17.13](https://github.com/sonicnkt/wpkg-gp/releases/tag/v0.17.13)
-
-Two uploads for this release, one with the debug console enabled and one without. If you encounter any problems try the
-debug version and post a new issue with the gathered information.
-
-As always check the wiki for installation and configuration [guide](https://github.com/sonicnkt/wpkg-gp-client/wiki/Installation-and-Usage).
-
-
-
-    TODO: Update spanish translation.
+Implementing status code check:
+# TODO: READ Status Codes instead of message:
+# 100 and 101 are normal install output of WPKG-GP and cancel success
+# 103 - Query output
+# 104 - Query, no pending tasks
+# Errors:
+# 200 - WPKG Command Returned error or Executer not ready
+# 201 - WPKG is already running
+# 202 - Cancel called but wpkg not running anymore
+# 203 - Connecting to network share failed
+# 204 - Client blocked (blacklist)
+# 205 - Execution at startup is disabled
+# 206 - No authorized to execute wpkg-gp
+# Reboots:
+# 301 - Reboot necessary but canceled (Client)
+# 302 - Reboot necessary, rebooting now
+# 303 - Reboot necessary, but policy = ignore, reboot pending
+# WPKG-GP CLient:
+# 401 - Service not running
+# 402 - Cancled by user
