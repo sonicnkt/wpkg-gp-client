@@ -63,6 +63,7 @@ def wpkggp_version(version):
         _winreg.CloseKey(key)
     except WindowsError:
         inst_version = None
+        return False
     if parse_version(req_version) <= parse_version(inst_version):
         return True
     else:
@@ -208,7 +209,10 @@ def getPercentage(str):
             progress = (float(cur) / float(max)) * 100
         except ZeroDivisionError:
             progress = 1
-    return int(progress)
+    if progress == 100:
+        return 99
+    else:
+        return int(progress)
 
 def getBootUp():
     p = Popen('wmic os get lastbootuptime', stdout=PIPE, stderr=PIPE, shell=True)
@@ -236,13 +240,8 @@ def wpkggp_query(cp, filter, blacklist):
         try:
             (hr, readmsg) = ReadFile(pipeHandle, 512)
             out = readmsg[4:]  # Strip 3 digit status code
-            if out.startswith('Unknown command'):
-                # installed wpkg-gp doesn't support the Query Command
-                error_msg = 'Error: Query function not supported in the installed wpkg-gp version.'
-            # print repr(out) # DEBUG!
-            n += 1
-            if n > 1:
-                # packages.append(out.decode('utf-8').split('\t'))
+            status_code = int(readmsg[:3])
+            if status_code == 103:
                 out = out.decode(cp)
                 if out.startswith('TASK'):
                     for x in ['TASK: ', 'NAME: ', 'REVISION: ']:
@@ -253,10 +252,15 @@ def wpkggp_query(cp, filter, blacklist):
                         # Filter Packages by name
                         if not package[1].lower().startswith(blacklist):
                             packages.append(package)
-            if out.startswith('No pending'):
+            elif status_code == 104:
+                # No pending updates
                 continue
-            if out.startswith('Error') or out.startswith('Info'):
-                error_msg = out
+            elif status_code > 200:
+                # errors
+                if status_code == 203:
+                    error_msg = 'Error: Query function not supported in the installed wpkg-gp version.'
+                else:
+                    error_msg = out
 
         except win32api.error as exc:
             if exc.winerror == winerror.ERROR_PIPE_BUSY:
@@ -350,8 +354,6 @@ def check_eventlog(start_time):
 
     log = []
     error_log = []
-    reboot = False
-
     try:
         events = 1
         while events:
@@ -374,9 +376,6 @@ def check_eventlog(start_time):
                     # Skip suppressed user notification info
                     if not msg.startswith('User notification suppressed.'):
                         log.append(string.join((the_time, computer, src, evt_type, '\n' + msg), ' : '))
-                    # Detect possible reboot
-                    if 'System reboot was initiated but overridden.' in msg:
-                        reboot = True
                     # Create additional error log if there are warnings or errors
                     if (evt_type == "ERROR") or (evt_type == "WARNING"):
                         # Only Append Errors and Warnings
@@ -393,4 +392,4 @@ def check_eventlog(start_time):
         win32evtlog.CloseEventLog(hand)
     except:
         print traceback.print_exc(sys.exc_info())
-    return log, error_log, reboot
+    return log, error_log
