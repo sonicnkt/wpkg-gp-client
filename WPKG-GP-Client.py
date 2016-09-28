@@ -159,7 +159,7 @@ class TaskBarIcon(wx.TaskBarIcon):
         startWorker(self.update_check_done, self.update_check)
 
     def update_check(self):
-        print 'Checking for Updates... ' + str(datetime.datetime.now()) #TODO: MOVE TO DEBUG LOGGER
+        # Update Check function
         if update_method == 'wpkg-gp':
             updates = wpkggp_query(cp, update_filter, update_blacklist)
         else:
@@ -171,20 +171,22 @@ class TaskBarIcon(wx.TaskBarIcon):
         return updates
 
     def update_check_done(self, result):
+        # Update check function ended
         r = result.get()
         self.checking_updates = False
-        print 'Update Check Done!' #TODO: MOVE TO DEBUG LOGGER
         if isinstance(r, basestring):
             # Error returned
             self.updates_available = False
             if self.upd_error_count < 2 and not self.show_no_updates:
+                # only display update errors on automatic check after the third error in a row
                 self.upd_error_count += 1
-                print "Update Error: {}".format(self.upd_error_count) #TODO: MOVE TO DEBUG LOGGER
             else:
                 error_str = _(u"Could not load updates:") + "\n" + r
                 self.ShowBalloon(title=_(u'Update Error'), text=error_str, msec=100, flags=wx.ICON_ERROR)
+                # reset update error counter
                 self.upd_error_count = 0
         elif r:
+            self.upd_error_count = 0
             action_dict = {'update': _(u'UPD:') + '\t',
                            'install': _(u'NEW:') + '\t',
                            'remove': _(u'REM:') + '\t',
@@ -197,6 +199,7 @@ class TaskBarIcon(wx.TaskBarIcon):
             self.ShowBalloon(title=_(u"Update(s) available:"), text=text, msec=100, flags=wx.ICON_INFORMATION)
         else:
             # No Updates Found
+            self.upd_error_count = 0
             self.updates_available = False
             if self.show_no_updates:
                 self.ShowBalloon(title=_(u"No Updates"), text=" ", msec=100, flags=wx.ICON_INFORMATION)
@@ -209,10 +212,10 @@ class TaskBarIcon(wx.TaskBarIcon):
     def on_upgrade(self, event):
         try:
             if self.wpkg_dialog.IsShown():
-                # If Dialog is opened allready raise window to top
+                # If dialog is opened already, raise window to top
                 self.wpkg_dialog.Raise()
                 return
-        except:
+        except AttributeError:
             # Dialog is not opened yet
             # Check if Reboot is Pending
             try:
@@ -260,9 +263,9 @@ class TaskBarIcon(wx.TaskBarIcon):
 
     def on_cancleshutdown(self, event):
         if self.reboot_scheduled:
-            # If reboot is cancled, set rebootpendingtime to registry
+            # If reboot is canceled, set reboot pending time to registry
             SetRebootPendingTime()
-        shutdown(3) # Cancel Shutdown
+        shutdown(3)  # Cancel Shutdown
         self.reboot_scheduled = False
         self.shutdown_scheduled = False
 
@@ -288,14 +291,10 @@ class RunWPKGDialog(wx.Dialog):
         self.log = ""
         self.InitUI()
         size_y = self.GetEffectiveMinSize()[1]
-        #self.SetSize(size)
         self.SetSize((410, size_y))
-        #self.SetSize((410, 273))
 
     def InitUI(self):
-
         self.panel = wx.Panel(self, wx.ID_ANY)
-
         # Info Text
         infotext = _(u'Close all open Applications, it is possible that programs will be closed without a warning '
                      u'and system could reboot without further confirmation.')
@@ -355,7 +354,7 @@ class RunWPKGDialog(wx.Dialog):
         dlg = wx.MessageDialog(self, dlg_msg, dlg_title, wx.YES_NO|wx.YES_DEFAULT|wx.ICON_EXCLAMATION)
         if dlg.ShowModal() == wx.ID_YES:
             dlg.Destroy()
-            # Deactivate Buttons and Close Window option!
+            # Disable/enable buttons and disable Close Window option!
             self.startButton.Disable()
             self.abortButton.Enable()
             self.EnableCloseButton(enable=False)
@@ -412,7 +411,7 @@ class RunWPKGDialog(wx.Dialog):
         try:
             pipeHandle = CreateFile("\\\\.\\pipe\\WPKG", GENERIC_READ|GENERIC_WRITE, 0, None, OPEN_EXISTING, 0, None)
         except pywintypes.error, (n, f, e):
-            #print "Error when generating pipe handle: %s" % e
+            # print "Error when generating pipe handle: %s" % e
             # Can't connect to pipe error, probably service not running
             return_msg = u"Error: WPKG-GP Service not running"
             return 208, return_msg, None
@@ -504,7 +503,7 @@ class RunWPKGDialog(wx.Dialog):
                 self.reboot_scheduled = True
                 self.Close()
             else:
-                # Reboot is Pending
+                # Reboot is pending
                 SetRebootPendingTime()
         elif chk_shutdown and not self.shouldAbort and not return_code:
             # shutdown configured, wpkg process not canceled and no error occurred
