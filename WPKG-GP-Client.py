@@ -20,7 +20,7 @@ img = AppImages(path)
 # set path to wpkg.xml and get system architecture
 xml_file, arch = arch_check()
 
-req_wpkggp_ver = '0.17.14'
+req_wpkggp_ver = '0.17.15'
 app_name = 'WPKG-GP Client'
 
 #Change working directory to get relative paths working for the images in the help files:
@@ -161,7 +161,7 @@ class TaskBarIcon(wx.TaskBarIcon):
     def update_check(self):
         # Update Check function
         if update_method == 'wpkg-gp':
-            updates = wpkggp_query(cp, update_filter, update_blacklist)
+            updates = wpkggp_query(update_filter, update_blacklist)
         else:
             local_packages = get_local_packages(xml_file)
             remote_packages, e = get_remote_packages(update_url)
@@ -421,7 +421,7 @@ class RunWPKGDialog(wx.Dialog):
         while 1:
             try:
                 (hr, readmsg) = ReadFile(pipeHandle, 512)
-                out = readmsg[4:].decode(cp) #Strip 3 digit status code, decode characters
+                out = readmsg[4:].decode('utf-8')  #Strip 3 digit status code, decode characters
                 status_code = int(readmsg[:3])
                 if status_code < 102:
                     # default status code for pipe updates
@@ -453,7 +453,7 @@ class RunWPKGDialog(wx.Dialog):
         # Get WPKG Log
         self.log, error_log = check_eventlog(self.wpkg_start_time)
         if self.shouldAbort:
-            self.update_box.SetValue('WPKG process aborted.')
+            self.update_box.SetValue(_(u'WPKG-GP process aborted.'))
             if return_code == 200:
                 # display the error msg ?
                 print return_msg
@@ -484,9 +484,9 @@ class RunWPKGDialog(wx.Dialog):
             dlg.ShowModal()
         else:
             if reboot:
-                self.update_box.SetValue('WPKG process finished, restart necessary!')
+                self.update_box.SetValue(_(u'WPKG-GP process finished, restart necessary!'))
             else:
-                self.update_box.SetValue('WPKG process finished.')
+                self.update_box.SetValue(_(u'WPKG-GP process finished.'))
         if error_log:
             log_dlg = ViewLogDialog(title=_(u"Error detected during update"), log=error_log)
             log_dlg.ShowModal()
@@ -584,9 +584,6 @@ if __name__ == '__main__':
     lang = wx.Locale.GetLanguageCanonicalName(lang_int)
     if not help_file or help_file.lower() == "default":
         help_file = get_help_translation(path, lang)
-
-    # Get Codepage for decoding wpkg-gp strings
-    cp = get_codepage()
 
     TRAY_ICON = os.path.join(path, 'img', 'apacheconf-16.png')
     TaskBarIcon(trayicon=TRAY_ICON, tooltip=app_name)

@@ -32,16 +32,6 @@ def get_client_path():
     path = os.path.abspath(pathname) + os.sep
     return path
 
-def get_codepage():
-    try:
-        key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, R"SYSTEM\CurrentControlSet\Control\Nls\CodePage", 0, _winreg.KEY_READ | _winreg.KEY_WOW64_64KEY)
-        codepage = _winreg.QueryValueEx(key, "OEMCP")[0]
-        _winreg.CloseKey(key)
-    except WindowsError:
-        print 'Registy Error: Can\'t read codepage'
-        codepage = '1252'
-    return 'cp' + codepage
-
 def wpkg_running():
     running = None
     try:
@@ -222,7 +212,7 @@ def getBootUp():
     return bootup_time
 
 
-def wpkggp_query(cp, filter, blacklist):
+def wpkggp_query(filter, blacklist):
     msg = 'Query'
     error_msg = None
     packages = []
@@ -239,7 +229,7 @@ def wpkggp_query(cp, filter, blacklist):
     while 1:
         try:
             (hr, readmsg) = ReadFile(pipeHandle, 512)
-            out = readmsg[4:].decode(cp)  # Strip 3 digit status code and decode
+            out = readmsg[4:].decode('utf-8')  # Strip 3 digit status code and decode
             status_code = int(readmsg[:3])
             if status_code == 103:
                 # query output
