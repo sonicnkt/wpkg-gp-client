@@ -100,7 +100,7 @@ __WPKG-GP Client__ uses code of other opensource projects:
 __Translations:__
 
 - spanish by _Julio San José Antolín_
-
+- brazilian portuguese by [_jader31_](https://github.com/jader31)
 <a name="license">
 ##License
 MIT LICENSE??

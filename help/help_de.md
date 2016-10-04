@@ -52,7 +52,7 @@ System ohne Benachrichtigung neustartet.
 Der Aktuelle Fortschritt der Aktualisierung wird über einen Fortschrittsbalken und einem Textfeld (Aktueller Fortschritt) dargestellt, dieses stellt 
 aber nur den Fortschritt des kompletten Aktualisierungs Vorgangs da und __NICHT__ den Fortschritt der Installation der individuellen Software.
 
-Der Prozess ist abgeschlossen wenn der Fortschrittsbalken komplett ist und unter _Aktueller Fortschritt_ "WPKG Process Finished" erscheint.
+Der Prozess ist abgeschlossen wenn der Fortschrittsbalken komplett ist und unter _Aktueller Fortschritt_ "WPKG-GP Prozess abgeschlossen" erscheint.
 Über die Option "__LOG__" können Sie sich die durchgeführte Arbeiten im Detail aufführen lassen. 
 
 Einige Programme benötigen nach der Aktualisierung einen Neustart des Systems um korrekt funktionieren zu können, dieser 
@@ -99,7 +99,7 @@ __WPKG-GP Client__ uses code of other opensource projects:
 __Translations:__
 
 - spanish by _Julio San José Antolín_
-
+- brazilian portuguese by [_jader31_](https://github.com/jader31)
 <a name="license">
 ##License
 MIT LICENSE??
