@@ -118,7 +118,7 @@ class TaskBarIcon(wx.TaskBarIcon):
                 if errorlog:
                     error_str = _(u"Update error detected\n"
                                   u"during system start up.")
-                    self.ShowBalloon(title=_(u'WPKG Error'), text=error_str, msec=100, flags=wx.ICON_ERROR)
+                    self.ShowBalloon(title=_(u'WPKG Error'), text=error_str, msec=20*1000, flags=wx.ICON_ERROR)
                     title = _(u"System start error")
                     dlg = ViewLogDialog(title=title,log=errorlog)
                     dlg.ShowModal()
@@ -182,7 +182,7 @@ class TaskBarIcon(wx.TaskBarIcon):
                 self.upd_error_count += 1
             else:
                 error_str = _(u"Could not load updates:") + "\n" + r
-                self.ShowBalloon(title=_(u'Update Error'), text=error_str, msec=100, flags=wx.ICON_ERROR)
+                self.ShowBalloon(title=_(u'Update Error'), text=error_str, msec=20*1000, flags=wx.ICON_ERROR)
                 # reset update error counter
                 self.upd_error_count = 0
         elif r:
@@ -196,13 +196,13 @@ class TaskBarIcon(wx.TaskBarIcon):
             text = ''
             for action, name, version in r:
                 text += action_dict[action] + name + ', v. ' + version + '\n'
-            self.ShowBalloon(title=_(u"Update(s) available:"), text=text, msec=100, flags=wx.ICON_INFORMATION)
+            self.ShowBalloon(title=_(u"Update(s) available:"), text=text, msec=20*1000, flags=wx.ICON_INFORMATION)
         else:
             # No Updates Found
             self.upd_error_count = 0
             self.updates_available = False
             if self.show_no_updates:
-                self.ShowBalloon(title=_(u"No Updates"), text=" ", msec=100, flags=wx.ICON_INFORMATION)
+                self.ShowBalloon(title=_(u"No Updates"), text=" ", msec=20*1000, flags=wx.ICON_INFORMATION)
                 self.show_no_updates = False
 
     def on_bubble(self, event):
