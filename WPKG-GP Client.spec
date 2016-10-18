@@ -61,7 +61,7 @@ exe = EXE(pyz,
           icon=myicon,
           version=myversion
           )
-		  
+
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,

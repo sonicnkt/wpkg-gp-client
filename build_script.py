@@ -1,10 +1,11 @@
 # -*- encoding: utf-8 -*-
 # WPKG-GP Client BUILD SCRIPT
 
-VERSION = "0.9.7.2"  # max 4 number values separated by a "."
-NAME = "WPKG-GP Client"  # Application Name
+VERSION = "0.9.7.2"                                             # max 4 number values separated by a "."
+NAME = "WPKG-GP Client"                                         # Application Name
 AUTHOR = "Nils Thiele"
-INNOSETUPCMD = r'%PROGRAMFILES(X86)%\Inno Setup 5\iscc.exe'  # InnoSetup with PreProcessor Support!
+INNOSETUPCMD = r'%PROGRAMFILES(X86)%\Inno Setup 5\iscc.exe'     # InnoSetup with PreProcessor Support!
+PYTHONSHELL = False                                             # True or False
 
 # DO NOT MODIFY AFTER THIS POINT IF YOU DON'T KNOW WHAT YOU ARE DOING!!!
 
@@ -18,6 +19,7 @@ print "ISCC path: ", INNOSETUPCMD
 from datetime import datetime
 import os, sys
 import codecs
+import re
 
 pathname = os.path.dirname(sys.argv[0])
 path = os.path.abspath(pathname) + os.sep
@@ -56,7 +58,6 @@ version_txt = u'''VSVersionInfo(
 )
 '''
 
-
 def v_convert(ver_str):
     # Converts any version string to a 4 digit string seperated by ", ".
     if len(ver_str) > 0:
@@ -92,10 +93,22 @@ rmdir_cmd = 'rmdir "{}" /s /q'.format(os.path.join(path, 'dist', 'WPKG-GP-Client
 os.system(rmdir_cmd)
 
 print
+print 'Creating SPEC file...'
+print '---------------------'
+with codecs.open('WPKG-GP Client.spec', 'r', 'utf-8') as spec_input:
+    spec_file = spec_input.read()
+current_spec_file = re.sub(r'console=(True|False),', 'console=' + str(PYTHONSHELL) + ',', spec_file)
+print current_spec_file
+raw_input()
+with codecs.open(path + '{}.spec'.format(BUILDID), 'w', 'utf-8') as outfile:
+    outfile.write(current_spec_file)
+
+
+print
 print 'Starting Pyinstaller...'
 print '-----------------------'
 # run pyinstaller
-pyinstaller_cmd = 'pyinstaller -y "WPKG-GP Client.spec"'
+pyinstaller_cmd = 'pyinstaller -y "{}.spec"'.format(BUILDID)
 os.system(pyinstaller_cmd)
 
 if os.path.isdir(os.path.join(path, 'dist', 'WPKG-GP-Client')):
