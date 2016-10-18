@@ -202,7 +202,7 @@ class TaskBarIcon(wx.TaskBarIcon):
             self.upd_error_count = 0
             self.updates_available = False
             if self.show_no_updates:
-                self.ShowBalloon(title=_(u"No Updates"), text=" ", msec=20*1000, flags=wx.ICON_INFORMATION)
+                self.ShowBalloon(title=_(u"No Updates"), text=" ", msec=5*1000, flags=wx.ICON_INFORMATION)
                 self.show_no_updates = False
 
     def on_bubble(self, event):
@@ -425,8 +425,8 @@ class RunWPKGDialog(wx.Dialog):
                 status_code = int(readmsg[:3])
                 if status_code < 102:
                     # default status code for pipe updates
-                    self.update_box.SetValue(out)
                     percentage = getPercentage(out)
+                    wx.CallAfter(self.update_box.SetValue, out)
                     wx.CallAfter(self.gauge.SetValue, percentage)
                 elif status_code > 300:
                     # reboot necessary
@@ -563,21 +563,21 @@ if __name__ == '__main__':
         dlgmsg = _(u'Can\'t open config file "{}"!').format("wpkg-gp_client.ini")
         dlg = wx.MessageDialog(None, dlgmsg, app_name, wx.OK | wx.ICON_ERROR)
         dlg.ShowModal()
-        exit(1)
+        sys.exit(1)
 
     # If an instance of WPKG-GP Client is running already in the users session
     if client_running():
         dlgmsg = _(u"An instance of WPKG-GP Client is already running!")
         dlg = wx.MessageDialog(None, dlgmsg, app_name, wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
-        exit()
+        sys.exit()
 
     if not wpkggp_version(req_wpkggp_ver):
         dlgmsg = _(u"WPKG-GP Client requires at least version"
                    u" {} of the WPKG-GP Service.").format(req_wpkggp_ver)
         dlg = wx.MessageDialog(None, dlgmsg, app_name, wx.OK | wx.ICON_ERROR)
         dlg.ShowModal()
-        exit()
+        sys.exit()
 
     # Set help file
     lang_int = mylocale.GetLanguage()
