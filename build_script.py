@@ -76,11 +76,6 @@ def v_convert(ver_str):
         return
 
 
-# Create version.txt file for pyinstaller
-current_version_txt = version_txt.format(v_convert(VERSION), NAME, AUTHOR, VERSION, BUILDID)
-with codecs.open(path + 'version.txt', 'w', 'utf-8') as outfile:
-    outfile.write(current_version_txt)
-
 # Changing current working directory for pyinstaller
 os.chdir(path)
 print 'Changed current working directory to: ', os.getcwd()
@@ -95,10 +90,15 @@ os.system(rmdir_cmd)
 print
 print 'Creating SPEC file...'
 print '---------------------'
+# Create version.txt file for pyinstaller, spec file
+current_version_txt = version_txt.format(v_convert(VERSION), NAME, AUTHOR, VERSION, BUILDID)
+with codecs.open(path + 'version.txt', 'w', 'utf-8') as outfile:
+    outfile.write(current_version_txt)
+# Create pyinstaller spec file for this build
 with codecs.open('WPKG-GP Client.spec', 'r', 'utf-8') as spec_input:
     spec_file = spec_input.read()
+# switch console window on/off
 current_spec_file = re.sub(r'console=(True|False),', 'console=' + str(PYTHONSHELL) + ',', spec_file)
-print current_spec_file
 with codecs.open(path + '{}.spec'.format(BUILDID), 'w', 'utf-8') as outfile:
     outfile.write(current_spec_file)
 
