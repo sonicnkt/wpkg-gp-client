@@ -99,7 +99,6 @@ with codecs.open('WPKG-GP Client.spec', 'r', 'utf-8') as spec_input:
     spec_file = spec_input.read()
 current_spec_file = re.sub(r'console=(True|False),', 'console=' + str(PYTHONSHELL) + ',', spec_file)
 print current_spec_file
-raw_input()
 with codecs.open(path + '{}.spec'.format(BUILDID), 'w', 'utf-8') as outfile:
     outfile.write(current_spec_file)
 
