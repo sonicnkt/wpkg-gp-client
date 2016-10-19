@@ -15,6 +15,7 @@ print "Version: ", VERSION
 print "Name: ", NAME
 print "Author: ", AUTHOR
 print "ISCC path: ", INNOSETUPCMD
+print "Python Shell: ", str(PYTHONSHELL)
 
 from datetime import datetime
 import os, sys
@@ -72,9 +73,7 @@ def v_convert(ver_str):
         return new_ver_str
     else:
         print "\nError: You have to specify a correct version value!\n"
-        exit(1)
-        return
-
+        sys.exit(1)
 
 # Changing current working directory for pyinstaller
 os.chdir(path)
@@ -123,10 +122,17 @@ print 'Building Inno Setup installer...'
 print '--------------------------------'
 # running inno setup to create installer package
 INNOSETUPPATH = os.path.expandvars(INNOSETUPCMD)
-innosetup_cmd = '""' + INNOSETUPPATH + '"' + ' /DMyAppVersion={0} /DMyAppName="{1}" /DMyAppPublisher="{2}" ' \
-                                             '/DMySourceDir="{3}" "{4}""'.format(VERSION,
-                                                                                 NAME,
-                                                                                 AUTHOR,
-                                                                                 os.path.join(path, 'dist'),
-                                                                                 os.path.join(path, 'dist', "setup_script.iss"))
+if not PYTHONSHELL:
+    installer_name = 'wpkg-gp-client_v' + VERSION
+else:
+    installer_name = 'wpkg-gp-client_v' + VERSION + '_debug'
+innosetup_cmd = '""' + INNOSETUPPATH + '"' + ' /DMyOutput="{0}" /DMyAppVersion={1} /DMyAppName="{2}" ' \
+                                             '/DMyAppPublisher="{3}" /DMySourceDir="{4}" "{5}""'.format(
+                                                                        installer_name,
+                                                                        VERSION,
+                                                                        NAME,
+                                                                        AUTHOR,
+                                                                        os.path.join(path, 'dist'),
+                                                                        os.path.join(path, 'dist', "setup_script.iss"))
 os.system(innosetup_cmd)
+
