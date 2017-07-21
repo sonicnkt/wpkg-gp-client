@@ -167,6 +167,19 @@ def ReadRebootPendingTime():
         return None
     return reboot_pending_time
 
+def ReadLastSyncTime():
+    with _winreg.CreateKeyEx(_winreg.HKEY_LOCAL_MACHINE, R"SOFTWARE\WPKG", 0,
+                             _winreg.KEY_READ | _winreg.KEY_WOW64_64KEY) as key:
+        try:
+            last_sync_value = _winreg.QueryValueEx(key, "lastsync")[0]
+        except WindowsError:
+            return None
+    try:
+        last_sync_time = datetime.datetime.strptime(last_sync_value, '%Y-%m-%d %H:%M:%S')
+    except (ValueError, TypeError):
+        return None
+    return last_sync_time
+
 def vpn_connected(arch="x64"):
     if arch == "x64":
         vpn_path = "C:\Program Files (x86)\Cisco\Cisco AnyConnect Secure Mobility Client\\vpncli.exe"
@@ -182,10 +195,6 @@ def vpn_connected(arch="x64"):
             return True
         else:
             return False
-
-def check_file_date(file):
-    time = datetime.datetime.fromtimestamp(os.path.getmtime(file))
-    return time
 
 def getPercentage(str):
     pat = re.compile('\(([0-9]{1,3})\/([0-9]{1,3})\)')

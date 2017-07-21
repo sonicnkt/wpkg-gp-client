@@ -1,11 +1,12 @@
 # -*- encoding: utf-8 -*-
 # WPKG-GP Client BUILD SCRIPT
 
-VERSION = "0.9.7.2"                                             # max 4 number values separated by a "."
-NAME = "WPKG-GP Client"                                         # Application Name
+VERSION = "0.9.7.4"         # max 4 number values separated by a "."
+NAME = "WPKG-GP Client"     # Application Name
 AUTHOR = "Nils Thiele"
-INNOSETUPCMD = r'%PROGRAMFILES(X86)%\Inno Setup 5\iscc.exe'     # InnoSetup with PreProcessor Support!
-PYTHONSHELL = False                                             # True or False
+PYTHONSHELL = False         # True or False, If True the compiled exe includes console window
+INSTALLER = True            # True or False, If True innosetup installer will be created
+INNOSETUPCMD = r'%PROGRAMFILES(X86)%\Inno Setup 5\iscc.exe'             # InnoSetup with PreProcessor Support!
 
 # DO NOT MODIFY AFTER THIS POINT IF YOU DON'T KNOW WHAT YOU ARE DOING!!!
 
@@ -118,21 +119,22 @@ else:
     print 'Error Occured during pyinstaller process'
     sys.exit(1)
 
-print 'Building Inno Setup installer...'
-print '--------------------------------'
-# running inno setup to create installer package
-INNOSETUPPATH = os.path.expandvars(INNOSETUPCMD)
-if not PYTHONSHELL:
-    installer_name = 'wpkg-gp-client_v' + VERSION
-else:
-    installer_name = 'wpkg-gp-client_v' + VERSION + '_debug'
-innosetup_cmd = '""' + INNOSETUPPATH + '"' + ' /DMyOutput="{0}" /DMyAppVersion={1} /DMyAppName="{2}" ' \
-                                             '/DMyAppPublisher="{3}" /DMySourceDir="{4}" "{5}""'.format(
-                                                                        installer_name,
-                                                                        VERSION,
-                                                                        NAME,
-                                                                        AUTHOR,
-                                                                        os.path.join(path, 'dist'),
-                                                                        os.path.join(path, 'dist', "setup_script.iss"))
-os.system(innosetup_cmd)
+if INSTALLER:
+    print 'Building Inno Setup installer...'
+    print '--------------------------------'
+    # running inno setup to create installer package
+    INNOSETUPPATH = os.path.expandvars(INNOSETUPCMD)
+    if PYTHONSHELL:
+        installer_name = 'wpkg-gp-client_v' + VERSION + '_debug'
+    else:
+        installer_name = 'wpkg-gp-client_v' + VERSION
+    innosetup_cmd = '""' + INNOSETUPPATH + '"' + ' /DMyOutput="{0}" /DMyAppVersion={1} /DMyAppName="{2}" ' \
+                                                 '/DMyAppPublisher="{3}" /DMySourceDir="{4}" "{5}""'.format(
+                                                                            installer_name,
+                                                                            VERSION,
+                                                                            NAME,
+                                                                            AUTHOR,
+                                                                            os.path.join(path, 'dist'),
+                                                                            os.path.join(path, 'dist', "setup_script.iss"))
+    os.system(innosetup_cmd)
 

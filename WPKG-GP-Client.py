@@ -20,7 +20,7 @@ img = AppImages(path)
 # set path to wpkg.xml and get system architecture
 xml_file, arch = arch_check()
 
-req_wpkggp_ver = '0.17.15'
+req_wpkggp_ver = '0.17.17'
 app_name = 'WPKG-GP Client'
 
 #Change working directory to get relative paths working for the images in the help files:
@@ -110,7 +110,7 @@ class TaskBarIcon(wx.TaskBarIcon):
             if update_startup:
                 self.on_timer(None)
         if check_bootup_log:
-            last_check = check_file_date(xml_file)
+            last_check = ReadLastSyncTime()
             now = datetime.datetime.now()
             if (self.bootup_time + datetime.timedelta(hours=1) > now) and \
                (self.bootup_time + datetime.timedelta(minutes=30) > last_check):
@@ -123,15 +123,16 @@ class TaskBarIcon(wx.TaskBarIcon):
                     dlg = ViewLogDialog(title=title,log=errorlog)
                     dlg.ShowModal()
         if check_last_upgrade:
-            # Check if the last changes to the local wpkg.xml are older than a specific time
+            # Check when WPKG-GP sucessfully synced the last time
             # Inform USER that he should upgrade the System
-            last_check = check_file_date(xml_file)
-            if last_check < (datetime.datetime.now() - datetime.timedelta(days=last_upgrade_interval)):
-                dlg_str = _(u"System should be updated!\n\n"
-                            u"System wasn't updated in over {} days.").format(str(last_upgrade_interval))
-                dlg = wx.MessageDialog(None, dlg_str, _(u"Attention!"), wx.OK | wx.ICON_EXCLAMATION)
-                dlg.ShowModal()
-                self.on_upgrade(None)
+            last_sync = ReadLastSyncTime()
+            if last_sync:
+                if last_sync < (datetime.datetime.now() - datetime.timedelta(days=last_upgrade_interval)):
+                    dlg_str = _(u"System should be updated!\n\n"
+                                u"System wasn't updated in over {} days.").format(str(last_upgrade_interval))
+                    dlg = wx.MessageDialog(None, dlg_str, _(u"Attention!"), wx.OK | wx.ICON_EXCLAMATION)
+                    dlg.ShowModal()
+                    self.on_upgrade(None)
 
     def CreatePopupMenu(self):
         menu = wx.Menu()
