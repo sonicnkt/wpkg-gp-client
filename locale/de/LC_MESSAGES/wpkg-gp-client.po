@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# German translation file for WPKG-GP Client
+# Copyright (C) 2025
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Nils Thile, Nicolas Schiller, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
@@ -309,3 +309,6 @@ msgstr "Fehler: Der WPKG-GP-Dienst läuft nicht."
 
 msgid "Looking for an active VPN-Connection."
 msgstr "Suche nach einer aktiven VPN-Verbindung."
+
+msgid "No Updates available for this Device."
+msgstr "Für dieses Gerät sind keine Updates verfügbar."

@@ -802,12 +802,13 @@ if __name__ == '__main__':
         dlg.ShowModal()
         sys.exit()
 
-    # if not check_wpkggp_version(req_wpkggp_ver):
-    #     dlgmsg = _("WPKG-GP Client requires at least version"
-    #                " {} of the WPKG-GP Service.").format(req_wpkggp_ver)
-    #     dlg = wx.MessageDialog(None, dlgmsg, app_name, wx.OK | wx.ICON_ERROR)
-    #     dlg.ShowModal()
-    #     sys.exit()
+    # If the required WPKG-GP Service is installed
+    if not check_wpkggp_version(req_wpkggp_ver):
+        dlgmsg = _("WPKG-GP Client requires at least version"
+                   " {} of the WPKG-GP Service.").format(req_wpkggp_ver)
+        dlg = wx.MessageDialog(None, dlgmsg, app_name, wx.OK | wx.ICON_ERROR)
+        dlg.ShowModal()
+        sys.exit()
 
     # Set help file
     if not help_file or help_file.lower() == "default":

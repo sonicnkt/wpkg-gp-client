@@ -1,6 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translation for WPKG-GP Client
+# This file is distributed under the same license as the WPKG-GP Client package.
+# Copyright (C) 2025
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
@@ -310,6 +310,24 @@ msgstr "¡El cliente WPKG-GP ya se está ejecutando!"
 msgid "WPKG-GP Client requires at least version {} of the WPKG-GP Service."
 msgstr ""
 "El cliente WPKG-GP necesita al menos la versión {} del servicio WPKG-GP."
+
+msgid "Contact IT Department"
+msgstr "Contacte al departamento de TI."
+
+msgid "connected"
+msgstr "conectado"
+
+msgid "WPKG process start cancelled by user."
+msgstr "Inicio del proceso WPKG cancelado por el usuario."
+
+msgid "Error: WPKG-GP Service not running."
+msgstr " Error: El servicio WPKG-GP no está en funcionamiento."
+
+msgid "Looking for an active VPN-Connection."
+msgstr "Buscando una conexión VPN activa."
+
+msgid "No Updates available for this Device."
+msgstr "No hay actualizaciones disponibles para este dispositivo."
 
 #~ msgid ""
 #~ "WPKG-GP is currently checking for updates,\n"
