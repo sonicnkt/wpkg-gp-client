@@ -21,7 +21,7 @@ def create_package_list(path):
         variable_name = re.sub('%', '', variable)
         value = 'None'
         try:
-            for entry in child.iterfind(u'variable[@name="{}"]'.format(variable_name)):
+            for entry in child.iterfind('variable[@name="{}"]'.format(variable_name)):
                 value = entry.attrib['value']
             return (variable, value)
         except TypeError:
@@ -42,8 +42,8 @@ def create_package_list(path):
     for entry in xmls:
         try:
             tree = ET.parse(entry[0])
-        except IOError, e:
-            print e
+        except IOError as e:
+            print(e)
             continue
         else:
             root = tree.getroot()
@@ -64,7 +64,7 @@ def create_package_list(path):
     return remote_packages
 
 
-def createXML(file, packages):
+def create_xml(file, packages):
     root = ET.Element('packages')
     date = datetime.now().strftime("%Y-%m-%d %H:%M")
     root.set('date', date)  # Set File Date
@@ -81,4 +81,4 @@ def createXML(file, packages):
     outputfile.close()
 
 packages = create_package_list(input_folder)
-createXML(output_file, packages)
+create_xml(output_file, packages)
