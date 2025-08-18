@@ -31,17 +31,14 @@ msi_exit_dic = {"1619": "ERROR_INSTALL_PACKAGE_OPEN_FAILED",
 # set translation function
 _ = wx.GetTranslation
 
-def get_client_path():
+def get_paths():
     """
-    Returns the absolute path to the directory containing the Executable.
+    Returns the absolute path to the executable as well as the bundle (pyinstaller) directory "_internal".
     Uses sys.argv[0] as the entry point.
     """
-    # Get the directory name of the Executable
     executable_path = os.path.abspath(os.path.dirname(sys.argv[0]))
-    # Ensure the path ends with a separator
-    if not executable_path.endswith(os.sep):
-        executable_path += os.sep
-    return executable_path
+    bundle_path = os.path.abspath(os.path.dirname(__file__))
+    return executable_path, bundle_path
 
 
 def is_wpkg_running():

@@ -1,4 +1,5 @@
 import wx
+from os.path import join
 
 
 class AppImages:
@@ -23,11 +24,11 @@ class AppImages:
         """
         try:
             # Attempt to retrieve the filename for the requested icon
-            image = 'img\\' + self.img_dict[iconname]
+            image = join(self.path, 'img', self.img_dict[iconname])
         except KeyError:
             # Icon name not found: notify the user and use the fallback image
             print(f'Image: "{iconname}" not found! Using placeholder image.')
-            image = 'img\\' + self.img_dict['toilet']
+            image = join(self.path, 'img', self.img_dict['toilet'])
         # Load the image from disk and convert it to a wx.Bitmap for use in wxPython
-        wximage = wx.Image(self.path + image, wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+        wximage = wx.Image(image, wx.BITMAP_TYPE_PNG).ConvertToBitmap()
         return wximage

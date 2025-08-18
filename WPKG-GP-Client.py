@@ -14,11 +14,15 @@ _ = wx.GetTranslation
 #if you are getting unicode errors, try something like:
 #_ = lambda s: wx.GetTranslation(s).encode('utf-8')
 
-# get program path
-path = get_client_path()
+
+# Get  directory paths
+client_path, bundle_path = get_paths()
+
+print("Client Path: ", client_path)
+print("Bundle Path: ", bundle_path)
 
 # load Image class
-img = AppImages(path)
+img = AppImages(bundle_path)
 
 # set path to wpkg.xml and get system architecture
 xml_file, arch = check_system_architecture()
@@ -27,12 +31,12 @@ req_wpkggp_ver = '0.17.17'
 app_name = 'WPKG-GP Client'
 
 #Change working directory to get relative paths working for the images in the help files:
-os.chdir(path)
+os.chdir(client_path)
 
 # Loading and setting INI settings:
 # ---------------------------------
 try:
-    ini = load_config.ConfigIni(os.path.join(path, 'wpkg-gp_client.ini'))
+    ini = load_config.ConfigIni(os.path.join(client_path, 'wpkg-gp_client.ini'))
 except load_config.NoConfigFile as error_msg:
     # Config file could not be opened!
     print(error_msg)
@@ -400,11 +404,8 @@ class TaskBarIcon(TaskBarIcon):
         Args:
             evt: The event object associated with the About/help request.
         """
-        # Construct the full path to the help file
-        helpfile = os.path.join(path, help_file)
-
         # Create and configure the help dialog
-        helpdlg = HelpDialog(helpfile, title=_('WPKG-GP Client - Help'))
+        helpdlg = HelpDialog(help_file, title=_('WPKG-GP Client - Help'))
         helpdlg.Center()  # Center the dialog on the screen
 
         # Display the help dialog modally
@@ -784,7 +785,7 @@ if __name__ == '__main__':
     # Translation configuration
     mylocale = wx.Locale(wx.LANGUAGE_DEFAULT)
     # TODO: Add config option or settings to force language? e.g.: wx.Locale(language=wx.LANGUAGE_FRENCH)
-    localedir = os.path.join(path, "locale")
+    localedir = os.path.join(bundle_path, "locale")
     mylocale.AddCatalogLookupPathPrefix(localedir)
     mylocale.AddCatalog('wpkg-gp-client')
 
@@ -812,9 +813,12 @@ if __name__ == '__main__':
 
     # Set help file
     if not help_file or help_file.lower() == "default":
-        help_file = get_help_translation_file(path, mylocale.Name)
+        help_file = get_help_translation_file(client_path, mylocale.Name)
+    else:
+        # Construct the full path to the custom help file
+        help_file = os.path.join(client_path, help_file)
 
-    TRAY_ICON = os.path.join(path, 'img', 'apacheconf-16.png')
+    TRAY_ICON = os.path.join(bundle_path, 'img', 'apacheconf-16.png')
     TaskBarIcon(trayicon=TRAY_ICON, tooltip=app_name)
     app.MainLoop()
 
