@@ -12,4 +12,6 @@ the communication with the wpkg-gp service, windows registry and event log acces
 Precompiled x86 binaries (works on both x64 and x86) are provided on the [releases page](https://github.com/sonicnkt/wpkg-gp-client/releases).
 No additional software has to be installed (Python Environment) except for wpkg-gp of course.
 
-You can find [screenshots](https://github.com/sonicnkt/wpkg-gp-client/wiki/Installation-and-Usage#usage) and detailed instructions in the projects [Wiki](https://github.com/sonicnkt/wpkg-gp-client/wiki).
+You can find detailed instructions in the projects [Wiki](https://github.com/sonicnkt/wpkg-gp-client/wiki).
+
+_WPKG-GP Client_ is licensed under the MIT License.
