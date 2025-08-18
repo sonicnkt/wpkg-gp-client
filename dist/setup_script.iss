@@ -43,6 +43,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 ;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "allow quit"; String: "True"
 ;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "check boot log"; String: "False"
 ;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "check vpn"; String: "False"
+;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "show it department website button"; String: "False"
+;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "it department website"; String: "https://exmaple.com"
 ;Filename: "{app}\wpkg-gp_client.ini"; Section: "Update Check"; Key: "start up"; String: "False"
 ;Filename: "{app}\wpkg-gp_client.ini"; Section: "Update Check"; Key: "interval"; String: "0"
 ;Filename: "{app}\wpkg-gp_client.ini"; Section: "Update Check"; Key: "update url"; String: "https://YOUR_WEB.SERVER/packages.xml"
@@ -51,6 +53,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Source: "{#MySourceDir}\WPKG-GP-Client\WPKG-GP-Client.exe"; DestDir: "{app}"; Flags: ignoreversion restartreplace
 Source: "{#MySourceDir}\WPKG-GP-Client\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+
+[InstallDelete]
+Type: filesandordirs; Name: "{app}\*"
 
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
