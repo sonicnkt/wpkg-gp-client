@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 # WPKG-GP Client BUILD SCRIPT
 
-VERSION = "0.9.8.0"         # max 4 number values separated by a "."
+VERSION = "1.0.0.0"         # max 4 number values separated by a "."
 NAME = "WPKG-GP Client"     # Application Name
 AUTHOR = "Nils Thiele"
 PYTHONSHELL = False         # True or False, If True the compiled exe includes console window
@@ -110,6 +110,15 @@ pyinstaller_cmd = 'pyinstaller -y "{}.spec"'.format(BUILDID)
 os.system(pyinstaller_cmd)
 
 if os.path.isdir(os.path.join(path, 'dist', 'WPKG-GP-Client')):
+    # Copy Help Files and example ini to build directory
+    os.system('xcopy "{0}" "{1}\" /S /E /I /H'.format(
+        os.path.join(path, 'help'),
+        os.path.join(path, 'dist', 'WPKG-GP-Client', 'help'),
+        ))
+    os.system('xcopy "{0}" "{1}\" /I /H'.format(
+        os.path.join(path, 'wpkg-gp_client_example.ini'),
+        os.path.join(path, 'dist', 'WPKG-GP-Client'),
+        ))
     print()
     print('Pyinstaller process successful.')
     print()
