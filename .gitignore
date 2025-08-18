@@ -1,10 +1,14 @@
 # pyinstaller
-/build
-/dist
+__pycache__/
+build/
+dist/
+!dist/setup_script.iss
+.venv/
 version.txt
 
-# venv
-.venv
+# Ignore spec files created by pyinstaller
+*.spec
+!WPKG-GP Client.spec
 
 # ini file for the WPKG client
 # This file is used to configure the WPKG client settings.
