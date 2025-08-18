@@ -61,7 +61,7 @@ Some programs need a system restart to function correctly after the installation
 the current user will only be informed to restart their system. A new system update will be blocked until the system was
 restarted.
 
-![Restart necessary](help\help_de_03.jpg)
+![Restart necessary](help\help_en_03.jpg)
 
 You can select the option __Shutdown after update__ before and during the update process is running. 
 
@@ -69,7 +69,7 @@ If a reboot or shutdown was initiated this process can be canceled by selecting 
 tray icons context menu. 
 
 <a name="error">
-##Erros during update
+##Errors during update
 If an error occurs during the system update process with the installation of a package an error log will be opened 
 automatically withe the process finished. A configured shutdown won't be executed.
 
