@@ -1,0 +1,11 @@
+# pyinstaller
+/build
+/dist
+version.txt
+
+# venv
+.venv
+
+# ini file for the WPKG client
+# This file is used to configure the WPKG client settings.
+wpkg-gp_client.ini

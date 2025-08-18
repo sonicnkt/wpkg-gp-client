@@ -1,3 +1,4 @@
+import os
 import wx
 import wx.html
 import webbrowser
@@ -25,15 +26,15 @@ class HelpDialog(wx.Dialog):
         #import codecs
         #file = codecs.open(self.help, "r", "utf-8")
         try:
-            file = open(self.help, "r")
+            file = open(self.help, "r", encoding="utf-8")
         except IOError:
-            dlgmsg = u"File not found: \"{}\"".format(self.help)
+            dlgmsg = "File not found: \"{}\"".format(self.help)
             dlg = wx.MessageDialog(None, dlgmsg, "WPKG-GP Client", wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()
             self.Destroy()
         else:
-            test = file.read().decode("utf-8")
+            test = file.read()
             html = markdown2.markdown(test, extras=["tables"])
             html = '<body bgcolor="#f0f0f5">' + html
             #print html
@@ -59,7 +60,12 @@ class HelpDialog(wx.Dialog):
 
 class MyApp(wx.App):
     def OnInit(self):
-        frame = HelpDialog('help.md', title='WPKG-GP-Client - Help')
+        # Folder, where the file is saved
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Path to file in folder 'help'
+        help_path = os.path.join(script_dir, "help", "help_en.md")
+        frame = HelpDialog(help_path, title='WPKG-GP-Client - Help')
         frame.Show(True)
         return True
 

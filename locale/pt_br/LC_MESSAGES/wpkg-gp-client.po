@@ -297,5 +297,22 @@ msgstr "Uma instancia do cliente WPKG-GP já está rodando!"
 
 #: WPKG-GP-Client.py:567
 msgid "WPKG-GP Client requires at least version {} of the WPKG-GP Service."
-msgstr ""
-"O cliente WPKG-GP requer pelo menos a versão {} do serviço WPKG-GP."
+msgstr "O cliente WPKG-GP requer pelo menos a versão {} do serviço WPKG-GP."
+
+msgid "Contact IT Department"
+msgstr "Entre em contato com o departamento de TI."
+
+msgid "connected"
+msgstr "conectado"
+
+msgid "WPKG process start cancelled by user."
+msgstr "Início do processo WPKG cancelado pelo usuário."
+
+msgid "Error: WPKG-GP Service not running."
+msgstr "Erro: Serviço WPKG-GP não está em execução."
+
+msgid "Looking for an active VPN-Connection."
+msgstr "Procurando uma conexão VPN ativa."
+
+msgid "No Updates available for this Device."
+msgstr "Nenhuma atualização disponível para este dispositivo."
