@@ -1,9 +1,9 @@
 # pyinstaller
 __pycache__/
-build/
-dist/
+build/*
+dist/*
 !dist/setup_script.iss
-.venv/
+.venv
 version.txt
 
 # Ignore spec files created by pyinstaller
