@@ -17,7 +17,6 @@ _ = wx.GetTranslation
 
 # Get  directory paths
 client_path, bundle_path = get_paths()
-
 print("Client Path: ", client_path)
 print("Bundle Path: ", bundle_path)
 
@@ -58,21 +57,22 @@ else:
     if update_method not in ['wpkg-gp', 'updatefile'] and update_method != False:
         update_method = 'wpkg-gp'
     # Update Check filter
-    try:
-        raw_update_filter = ini.load_setting('Update Check', 'filter').strip().split(';')
-    except AttributeError:
-        raw_update_filter = ''
+    raw_update_filter = ini.load_setting('Update Check', 'filter')
     available_filter = ('update', 'install', 'downgrade', 'remove')
-    if raw_update_filter == 'all' or raw_update_filter == '':
-        update_filter = available_filter
-    else:
+    if isinstance(raw_update_filter, str) and (raw_update_filter != ''):
+        raw_update_filter = raw_update_filter.lower().strip().split(';')
         update_filter = tuple([entry for entry in raw_update_filter if entry in available_filter])
+    else:
+        update_filter = None
+    if not update_filter:
+        update_filter = available_filter
+    print("Update Filters: ", repr(update_filter))
     # Update Check blacklist
-    try:
-        raw_update_blacklist = ini.load_setting('Update Check', 'blacklist').lower().strip().split(';')
-    except AttributeError:
-        raw_update_blacklist = ''
-    update_blacklist = tuple(raw_update_blacklist)
+    raw_update_blacklist = ini.load_setting('Update Check', 'blacklist')
+    if isinstance(raw_update_blacklist, str) and (raw_update_blacklist != ''):
+        update_blacklist = tuple(raw_update_blacklist.lower().strip().split(';'))
+    else:
+        update_blacklist = ()
     update_startup = ini.load_setting('Update Check', 'startup', bool, False)
     update_interval = ini.load_setting('Update Check', 'interval', int, 30)
     if isinstance(update_interval, int):

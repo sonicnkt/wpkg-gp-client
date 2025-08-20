@@ -500,6 +500,8 @@ def wpkggp_query(task_filter, blacklist_prefix):
                 out = readmsg[4:]
 
             if status_code == 103:
+                # DEBUG
+                repr(out)
                 # Query output: remove tags and split by tabs
                 for tag in ['TASK: ', 'NAME: ', 'REVISION: ']:
                     out = out.replace(tag, '')
@@ -507,7 +509,7 @@ def wpkggp_query(task_filter, blacklist_prefix):
 
                 # Filtering by task and blacklist prefix
                 if len(package) >= 2 and package[0] in task_filter:
-                    if not package[1].lower().startswith(blacklist_prefix.lower()):
+                    if not package[1].lower().startswith(blacklist_prefix):
                         packages.append(package)
 
             elif status_code == 104:
