@@ -38,16 +38,16 @@ UninstallDisplayIcon={app}\WPKG-GP-Client.exe
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [INI]
-;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "check last update"; String: "False"
-;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "last update interval"; String: "14"
-;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "allow quit"; String: "True"
-;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "check boot log"; String: "False"
-;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "check vpn"; String: "False"
-;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "show it department website button"; String: "False"
-;Filename: "{app}\wpkg-gp_client.ini"; Section: "General"; Key: "it department website"; String: "https://exmaple.com"
-;Filename: "{app}\wpkg-gp_client.ini"; Section: "Update Check"; Key: "start up"; String: "False"
-;Filename: "{app}\wpkg-gp_client.ini"; Section: "Update Check"; Key: "interval"; String: "0"
-;Filename: "{app}\wpkg-gp_client.ini"; Section: "Update Check"; Key: "update url"; String: "https://YOUR_WEB.SERVER/packages.xml"
+;Filename: "{app}\wpkg-gp-client.ini"; Section: "General"; Key: "check last update"; String: "False"
+;Filename: "{app}\wpkg-gp-client.ini"; Section: "General"; Key: "last update interval"; String: "14"
+;Filename: "{app}\wpkg-gp-client.ini"; Section: "General"; Key: "allow quit"; String: "True"
+;Filename: "{app}\wpkg-gp-client.ini"; Section: "General"; Key: "check boot log"; String: "False"
+;Filename: "{app}\wpkg-gp-client.ini"; Section: "General"; Key: "check vpn"; String: "False"
+;Filename: "{app}\wpkg-gp-client.ini"; Section: "General"; Key: "show it department website button"; String: "False"
+;Filename: "{app}\wpkg-gp-client.ini"; Section: "General"; Key: "it department website"; String: "https://exmaple.com"
+;Filename: "{app}\wpkg-gp-client.ini"; Section: "Update Check"; Key: "start up"; String: "False"
+;Filename: "{app}\wpkg-gp-client.ini"; Section: "Update Check"; Key: "interval"; String: "0"
+;Filename: "{app}\wpkg-gp-client.ini"; Section: "Update Check"; Key: "update url"; String: "https://YOUR_WEB.SERVER/packages.xml"
 
 [Files]
 Source: "{#MySourceDir}\WPKG-GP-Client\WPKG-GP-Client.exe"; DestDir: "{app}"; Flags: ignoreversion restartreplace
@@ -75,16 +75,16 @@ begin
   if CurStep = ssPostInstall then begin
     if FileExists(ExpandConstant('{param:ini|None}')) then begin
       // delete installed ini file first
-      DeleteFile(ExpandConstant('{app}\wpkg-gp_client.ini'));
+      DeleteFile(ExpandConstant('{app}\wpkg-gp-client.ini'));
       // copy supplied ini file
-      FileCopy(ExpandConstant('{param:ini|None}'),ExpandConstant('{app}\wpkg-gp_client.ini'),True);
+      FileCopy(ExpandConstant('{param:ini|None}'),ExpandConstant('{app}\wpkg-gp-client.ini'),True);
       // MsgBox('Custom ini installed: ' + ExpandConstant('{param:ini|None}'), mbInformation, MB_OK);
     end;
     // if no default ini exists copy the example ini to the default
-    if not FileExists(ExpandConstant('{app}\wpkg-gp_client.ini')) then begin
+    if not FileExists(ExpandConstant('{app}\wpkg-gp-client.ini')) then begin
       //MsgBox('No default ini supplied', mbInformation, MB_OK);
       //copy example ini to default ini
-      FileCopy(ExpandConstant('{app}\wpkg-gp_client_example.ini'),ExpandConstant('{app}\wpkg-gp_client.ini'),True)
+      FileCopy(ExpandConstant('{app}\wpkg-gp-client_example.ini'),ExpandConstant('{app}\wpkg-gp-client.ini'),True)
     end;
   end;
 end;

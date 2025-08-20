@@ -35,7 +35,7 @@ os.chdir(client_path)
 # Loading and setting INI settings:
 # ---------------------------------
 try:
-    ini = load_config.ConfigIni(os.path.join(client_path, 'wpkg-gp_client.ini'))
+    ini = load_config.ConfigIni(os.path.join(client_path, 'wpkg-gp-client.ini'))
 except load_config.NoConfigFile as error_msg:
     # Config file could not be opened!
     print(error_msg)
@@ -66,7 +66,6 @@ else:
         update_filter = None
     if not update_filter:
         update_filter = available_filter
-    print("Update Filters: ", repr(update_filter))
     # Update Check blacklist
     raw_update_blacklist = ini.load_setting('Update Check', 'blacklist')
     if isinstance(raw_update_blacklist, str) and (raw_update_blacklist != ''):
@@ -246,7 +245,8 @@ class TaskBarIcon(TaskBarIcon):
 
         # Start the update check in a worker thread;
         # self.update_check_done is the callback, self.update_check does the actual work
-        startWorker(self.update_check_done, self.update_check)
+        startWorker(self.update_check_done, self.update_check)    
+
 
     def open_it_department_website(self, event):
         """

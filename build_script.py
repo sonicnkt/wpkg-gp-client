@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 # WPKG-GP Client BUILD SCRIPT
 
-VERSION = "1.0.0.0"         # max 4 number values separated by a "."
+VERSION = "0.9.8.4"         # max 4 number values separated by a "."
 NAME = "WPKG-GP Client"     # Application Name
 AUTHOR = "Nils Thiele"
 PYTHONSHELL = False         # True or False, If True the compiled exe includes console window
