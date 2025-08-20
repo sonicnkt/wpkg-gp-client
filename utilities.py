@@ -369,16 +369,13 @@ def is_cisco_secure_client_vpn_connected(arch="x64"):
         bool: True if VPN is connected, False otherwise.
     """
     # Construct the path to the vpncli.exe based on system architecture
-    if arch == "x64":
-        vpn_path = os.path.join(
-            "C:\\", "Program Files (x86)", "Cisco", "Cisco Secure Client", "vpncli.exe"
-        )
-    else:
-        vpn_path = os.path.join(
-            "C:\\", "Program Files", "Cisco", "Cisco Secure Client", "vpncli.exe"
-        )
+    
+    if arch == "x64": program_files = "%PROGRAMFILES(X86)%"
+    else: program_files = "%PROGRAMFILES%"
+    vpn_path = os.path.join(program_files, "Cisco", "Cisco Secure Client", "vpncli.exe")
+    vpn_path = os.path.expandvars(vpn_path)
 
-    # Run the vpncli.exe command to check VPN state
+    # Run the vpncli.exe command to check VPN status
     try:
         # Run vpncli.exe status and capture output
         result = subprocess.run(
@@ -387,9 +384,9 @@ def is_cisco_secure_client_vpn_connected(arch="x64"):
             text=True,
             creationflags=subprocess.CREATE_NO_WINDOW
         )
-        keywords = ["connected", "verbunden", "conectado"]
+        connected_strings = ["state: connected", "status: verbunden", "estado: conectado"]
         output_lower = result.stdout.lower()
-        if any(keyword in output_lower for keyword in keywords):
+        if any(connected_str in output_lower for connected_str in connected_strings):
             return True
         else:
             return False
