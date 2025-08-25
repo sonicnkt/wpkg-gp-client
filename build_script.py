@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 # WPKG-GP Client BUILD SCRIPT
 
-VERSION = "0.9.8.4"         # max 4 number values separated by a "."
+VERSION = "0.9.9.5"         # max 4 number values separated by a "."
 NAME = "WPKG-GP Client"     # Application Name
 AUTHOR = "Nils Thiele"
 PYTHONSHELL = False         # True or False, If True the compiled exe includes console window
@@ -116,7 +116,7 @@ if os.path.isdir(os.path.join(path, 'dist', 'WPKG-GP-Client')):
         os.path.join(path, 'dist', 'WPKG-GP-Client', 'help'),
         ))
     os.system('xcopy "{0}" "{1}\" /I /H'.format(
-        os.path.join(path, 'wpkg-gp_client_example.ini'),
+        os.path.join(path, 'wpkg-gp-client_example.ini'),
         os.path.join(path, 'dist', 'WPKG-GP-Client'),
         ))
     print()

@@ -1,9 +1,0 @@
-Changelog 0.9.7.1 - TESTING:
-- wpkg-gp information is now interpreted by their status code (v0.17.15)
-    - this allows wpkg-gp to be translated
-- updated german translation
-- added brazilian portuguese translation (by jader31 on github)
-- spanish and brazilian translations are not 100% atm
-
-This Release depends on WPKG-GP v0.17.15!
-
